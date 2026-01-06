@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Organisation (entreprise cliente)
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  domain    String?  @unique
+  logo      String?
+  plan      Plan     @default(FREE)
+  maxUsers  Int      @default(10)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       User[]
+  rex         Rex[]
+  invitations Invitation[]
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+// Utilisateur
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  avatar    String?
+  role      Role     @default(COLLABORATEUR)
+  jobTitle  String?
+  department String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  managerId   String?
+  manager     User?   @relation("ManagerRelation", fields: [managerId], references: [id])
+  teamMembers User[]  @relation("ManagerRelation")
+
+  // REX envoyés (en tant que collaborateur)
+  rexSent Rex[] @relation("CollaborateurRex")
+
+  // REX reçus (en tant que manager)
+  rexReceived Rex[] @relation("ManagerRex")
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+}
+
+enum Role {
+  COLLABORATEUR
+  MANAGER
+  HR
+  ADMIN
+}
+
+// REX (Retour d'Expérience)
+model Rex {
+  id     String    @id @default(cuid())
+  token  String    @unique @default(cuid())
+  status RexStatus @default(PENDING)
+
+  // Mode
+  isAnonymous Boolean   @default(false)
+  source      RexSource @default(PORTAL)
+
+  // Collaborateur
+  collaborateurId     String?
+  collaborateur       User?   @relation("CollaborateurRex", fields: [collaborateurId], references: [id])
+  collaborateurPrenom String
+  collaborateurNom    String?
+  collaborateurEmail  String
+  collaborateurMetier String?
+
+  // Manager
+  managerId    String
+  manager      User   @relation("ManagerRex", fields: [managerId], references: [id])
+  managerNom   String
+  managerEmail String
+
+  // Organisation
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Données conversation (JSON brut)
+  conversationData Json?
+
+  // Données analysées (JSON structuré)
+  analysisData Json?
+
+  // Flags de qualité
+  dataQuality   DataQuality @default(COMPLETE)
+  missingThemes String[]    @default([])
+
+  // Scores par thématique (1-10, null si non renseigné)
+  t1RelationScore      Int?
+  t2ChargeScore        Int?
+  t3ObjectifsScore     Int?
+  t4MotivationScore    Int?
+  t5DeveloppementScore Int?
+  t6EquipeScore        Int?
+
+  // Synthèse
+  prioritePrincipale String?
+  attenteManager     String?
+  projetFocus        String?
+  pointPositif       String?
+  rdvSouhaite        Boolean?
+
+  // Documents générés
+  pdfCollaborateurUrl String?
+  pdfManagerUrl       String?
+
+  // Timestamps
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  analyzedAt  DateTime?
+  sentAt      DateTime?
+  viewedAt    DateTime?
+
+  // Feedback manager
+  managerFeedback String?
+  managerRating   Int?
+  actionsTaken    Json?
+}
+
+enum RexStatus {
+  PENDING     // Lien créé, pas commencé
+  IN_PROGRESS // Conversation en cours
+  COMPLETED   // Conversation terminée
+  ANALYZING   // IA en cours d'analyse
+  ANALYZED    // Analyse terminée
+  SENT        // Emails envoyés
+  VIEWED      // Manager a vu
+  ACTIONED    // Manager a agi
+}
+
+enum RexSource {
+  TYPEBOT // Via Typebot
+  PORTAL  // Via le portail
+  API     // Via API
+}
+
+enum DataQuality {
+  COMPLETE // Toutes les thématiques remplies
+  PARTIAL  // Quelques thématiques manquantes
+  MINIMAL  // Très peu de données
+  EMPTY    // Quasiment vide
+}
+
+// Invitations (pour inviter des collaborateurs)
+model Invitation {
+  id     String           @id @default(cuid())
+  email  String
+  role   Role             @default(COLLABORATEUR)
+  token  String           @unique @default(cuid())
+  status InvitationStatus @default(PENDING)
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  invitedById String
+
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  CANCELLED
+}
