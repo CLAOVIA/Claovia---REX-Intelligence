@@ -1,64 +1,55 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-  /* Couleurs Claovia */
-  --claovia-dark: #0E3C26;
-  --claovia-main: #058247;
-  --claovia-light: #10B981;
-  --cream: #FAF3EA;
-  --cream-dark: #F5EADB;
-  --text: #1F2937;
-  --text-light: #6B7280;
+  /* Design System Premium */
+  --deep: #20372F;
+  --accent: #3A8577;
+  --light: #EBF5F3;
+  --cream: #F9F9F7;
   --white: #FFFFFF;
-  --error: #EF4444;
-  --warning: #F59E0B;
-  --success: #10B981;
+  --alert-red: #E04F5F;
+  --alert-orange: #F59E0B;
 
   /* Variables Next.js */
-  --background: #FAF3EA;
-  --foreground: #1F2937;
+  --background: #F9F9F7;
+  --foreground: #20372F;
 }
 
 @theme inline {
   --color-*: initial;
 
-  /* Couleurs Claovia */
-  --color-claovia-dark: var(--claovia-dark);
-  --color-claovia-main: var(--claovia-main);
-  --color-claovia-light: var(--claovia-light);
+  /* Design System Premium Colors */
+  --color-deep: var(--deep);
+  --color-accent: var(--accent);
+  --color-light: var(--light);
   --color-cream: var(--cream);
-  --color-cream-dark: var(--cream-dark);
+  --color-white: var(--white);
+  --color-alert-red: var(--alert-red);
+  --color-alert-orange: var(--alert-orange);
 
   /* Background et foreground */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Couleurs sémantiques */
-  --color-text: var(--text);
-  --color-text-light: var(--text-light);
-  --color-white: var(--white);
-  --color-error: var(--error);
-  --color-warning: var(--warning);
-  --color-success: var(--success);
-
   /* Police */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-head: 'Poppins', ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Border radius */
-  --radius-2xl: 1rem;
+  /* Border radius - Prononcés */
+  --radius-3xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Shadows */
+  /* Shadows - Douces */
+  --shadow-soft: 0 20px 40px -10px rgba(32, 55, 47, 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0E3C26;
-    --foreground: #FAF3EA;
+    --background: #20372F;
+    --foreground: #F9F9F7;
   }
 }
 
@@ -70,6 +61,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  transition: all 0.3s ease;
+/* Glassmorphism Effect */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 20px 40px -10px rgba(32, 55, 47, 0.1);
 }
