@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Play, ArrowUp } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,18 +18,12 @@ export function Navbar() {
   const [showStickyCta, setShowStickyCta] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setScrolled(scrollY > 20);
-      // Show sticky CTA after 50vh (half viewport height)
-      setShowStickyCta(scrollY > window.innerHeight * 0.5);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 20);
+    setShowStickyCta(latest > window.innerHeight * 0.5);
+  });
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -37,21 +31,21 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 px-4 sm:px-6 py-4">
+      <nav className="fixed top-0 w-full z-50 px-4 sm:px-6 py-4 will-change-transform">
         <motion.div
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
-          className={`max-w-6xl mx-auto rounded-full px-6 py-3 transition-all duration-500 ${scrolled
-              ? "glass-scrolled shadow-xl"
-              : "glass-enhanced shadow-md"
+          className={`max-w-6xl mx-auto rounded-full px-6 py-3 transition-all duration-300 ${scrolled
+            ? "glass-scrolled shadow-xl"
+            : "glass-enhanced shadow-md"
             }`}
         >
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link
               href="/"
-              className="font-head font-bold text-xl tracking-tight text-deep hover:text-accent transition-colors"
+              className="font-head font-bold text-xl tracking-tight text-deep hover:text-accent transition-colors relative z-50"
             >
               <span className="flex items-center gap-2">
                 <motion.span
@@ -78,8 +72,8 @@ export function Navbar() {
                   <Link
                     href={link.href}
                     className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-full ${pathname === link.href
-                        ? "text-accent"
-                        : "text-gray-600 hover:text-accent hover:bg-accent/5"
+                      ? "text-accent"
+                      : "text-gray-600 hover:text-accent hover:bg-accent/5"
                       }`}
                   >
                     {link.label}
@@ -100,7 +94,7 @@ export function Navbar() {
                 href="https://typebot.co/claovia-rex-clao-ia-05gi2vb"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-4 bg-deep text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-accent transition-all hover:shadow-lg hover:shadow-accent/20 touch-target"
+                className="ml-4 bg-deep text-white px-5 py-2.5 rounded-full text-sm font-bold hover:bg-accent transition-all hover:shadow-lg hover:shadow-accent/20 touch-target will-change-transform"
               >
                 Tester le REX
               </motion.a>
@@ -109,7 +103,7 @@ export function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors touch-target"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors touch-target z-50"
               aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             >
               {mobileMenuOpen ? (
@@ -140,8 +134,8 @@ export function Navbar() {
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={`text-base font-medium py-3 px-4 rounded-xl transition-all touch-target ${pathname === link.href
-                        ? "text-accent bg-accent/10"
-                        : "text-gray-600 hover:text-accent hover:bg-gray-50"
+                      ? "text-accent bg-accent/10"
+                      : "text-gray-600 hover:text-accent hover:bg-gray-50"
                       }`}
                   >
                     {link.label}
@@ -164,7 +158,7 @@ export function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Sticky CTA - appears after 50vh scroll */}
+      {/* Sticky CTA */}
       <div className={`sticky-cta ${showStickyCta ? "visible" : ""}`}>
         <div className="flex gap-2">
           <a

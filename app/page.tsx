@@ -29,7 +29,7 @@ export default function Home() {
     <div className="min-h-screen bg-cream font-sans text-deep selection:bg-accent selection:text-white overflow-x-hidden">
       <Navbar />
 
-      <Navbar />
+
 
       {/* =====================================================
           HERO SECTION (Updated Master Vision)

@@ -119,7 +119,7 @@ export function ScrollAnimation() {
                         >
                             <motion.div
                                 style={{ scale: sendScale }}
-                                className="glass-enhanced rounded-3xl p-6 shadow-2xl border border-white/40 relative overflow-hidden group"
+                                className="glass-enhanced rounded-3xl p-6 shadow-2xl border border-white/40 relative overflow-hidden group will-change-transform"
                             >
                                 {/* Decorative gradient blur */}
                                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-all duration-500" />

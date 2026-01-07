@@ -6,6 +6,7 @@ import Link from "next/link";
 import { RexCard } from "@/components/dashboard/RexCard";
 import { useState, useEffect } from "react";
 import { TrustBadges } from "@/components/landing/social-proof";
+import { ScrollDownArrow } from "@/components/landing/ScrollDownArrow";
 
 // Mock Data for the Hero Demo
 const HERO_REX_DATA = {
@@ -143,7 +144,7 @@ export function HeroSplit3D() {
                                 key={i}
                                 initial={{ opacity: 0, x: -50, scale: 0.8 }}
                                 animate={{ opacity: 1, x: 0, scale: 1 }}
-                                className={`p-3 rounded-2xl text-xs font-medium shadow-lg backdrop-blur-sm 
+                                className={`p-3 rounded-2xl text-xs font-medium shadow-lg backdrop-blur-sm will-change-transform
                                     ${msg.role === 'bot' ? 'bg-white/90 text-deep rounded-tl-sm self-start' : 'bg-accent text-white rounded-tr-sm self-end ml-auto'}
                                 `}
                             >
@@ -157,12 +158,12 @@ export function HeroSplit3D() {
                         <motion.div
                             animate={{ rotate: 360 }}
                             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                            className="w-[120%] h-[120%] border-[1px] border-dashed border-accent/20 rounded-full"
+                            className="w-[120%] h-[120%] border-[1px] border-dashed border-accent/20 rounded-full will-change-transform"
                         />
                         <motion.div
                             animate={{ rotate: -360 }}
                             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                            className="w-[80%] h-[80%] border-[1px] border-dashed border-deep/20 rounded-full absolute"
+                            className="w-[80%] h-[80%] border-[1px] border-dashed border-deep/20 rounded-full absolute will-change-transform"
                         />
                     </div>
 
@@ -171,7 +172,7 @@ export function HeroSplit3D() {
                         initial={{ rotateY: 20, rotateX: 5, x: 50, opacity: 0 }}
                         animate={{ rotateY: -10, rotateX: 5, x: 0, opacity: 1 }}
                         transition={{ duration: 1, delay: 0.5 }}
-                        className="relative z-30 ml-20 w-80 md:w-96"
+                        className="relative z-30 ml-20 w-80 md:w-96 will-change-transform"
                     >
                         {/* Glowing effect behind card */}
                         <div className="absolute inset-0 bg-accent/20 blur-3xl rounded-full -z-10" />
@@ -185,7 +186,7 @@ export function HeroSplit3D() {
                         <motion.div
                             animate={{ y: [-10, 10, -10] }}
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute -top-6 -right-6 bg-white p-3 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2"
+                            className="absolute -top-6 -right-6 bg-white p-3 rounded-xl shadow-lg border border-gray-100 flex items-center gap-2 will-change-transform"
                         >
                             <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
                             <span className="text-xs font-bold text-deep">Action requise</span>
@@ -195,6 +196,8 @@ export function HeroSplit3D() {
                 </div>
 
             </div>
-        </section>
+
+            <ScrollDownArrow />
+        </section >
     );
 }
