@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import { Play } from "lucide-react";
 
 interface Message {
   id: number;
@@ -12,11 +12,9 @@ interface Message {
 }
 
 const messages: Message[] = [
-  { id: 1, sender: "bot", text: "Bonjour ! Prêt pour ton REX trimestriel ?", delay: 0 },
-  { id: 2, sender: "user", text: "Oui, c'est parti.", delay: 1.5 },
-  { id: 3, sender: "bot", text: "Comment évalues-tu ta charge actuelle ?", delay: 3 },
-  { id: 4, sender: "user", text: "Honnêtement ? C'est intense en ce moment.", delay: 4.5 },
-  { id: 5, sender: "bot", text: "C'est noté. Analyse en cours...", delay: 6 },
+  { id: 1, sender: "bot", text: "Bilan S42 : Charge de travail ?", delay: 0 },
+  { id: 2, sender: "user", text: "Surcharge critique. Le projet Alpha me bloque.", delay: 1.5 },
+  { id: 3, sender: "bot", text: "Bien reçu. J'analyse ton REX pour ton manager.", delay: 3 },
 ];
 
 export function CollabChat() {
@@ -34,41 +32,45 @@ export function CollabChat() {
   }, []);
 
   return (
-    <div className="w-full h-full bg-white rounded-3xl p-6 flex flex-col gap-4 shadow-sm border border-black/5 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full bg-light/50 p-3 flex items-center gap-3 border-b border-black/5">
-        <div className="w-2 h-2 rounded-full bg-red-400" />
-        <div className="w-2 h-2 rounded-full bg-yellow-400" />
-        <div className="w-2 h-2 rounded-full bg-green-400" />
-        <span className="text-xs font-mono text-deep/60 ml-2">
-          Typebot Collaborateur
+    <div className="bg-white rounded-[28px] border border-gray-200 h-[420px] shadow-card flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="bg-gray-50 border-b border-gray-200 p-4 flex justify-between items-center">
+        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+          Entrée : Collaborateur
         </span>
+        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
       </div>
-      <div className="mt-8 flex flex-col gap-3">
+
+      {/* Messages */}
+      <div className="p-4 space-y-4 flex-1 overflow-y-auto">
         <AnimatePresence>
           {visibleMessages.map((msg) => (
             <motion.div
               key={msg.id}
-              initial={{ opacity: 0, y: 10, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              className={`p-3 rounded-2xl text-sm max-w-[85%] ${
-                msg.sender === "bot"
-                  ? "bg-light text-deep self-start rounded-tl-sm"
-                  : "bg-deep text-white self-end rounded-tr-sm"
-              }`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className={`p-3 text-sm rounded-[16px] max-w-[90%] ${msg.sender === "bot"
+                  ? "bg-light text-deep"
+                  : "bg-deep text-white ml-auto"
+                }`}
             >
               {msg.text}
             </motion.div>
           ))}
         </AnimatePresence>
-        {visibleMessages.length === messages.length && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="self-center text-xs text-accent flex items-center gap-1 mt-2"
-          >
-            <CheckCircle2 size={12} /> Données envoyées
-          </motion.div>
-        )}
+      </div>
+
+      {/* Footer CTA */}
+      <div className="p-4 bg-white border-t border-gray-100">
+        <a
+          href="https://typebot.co/claovia-rex-clao-ia-05gi2vb"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-3 bg-light text-deep font-bold rounded-lg hover:bg-accent hover:text-white transition-colors text-sm"
+        >
+          <Play size={16} /> Tester ce REX (Réel)
+        </a>
       </div>
     </div>
   );

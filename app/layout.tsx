@@ -63,7 +63,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="fr" suppressHydrationWarning>
-        <body className={`${inter.variable} ${poppins.variable} font-sans`}>
+        <body className={`${inter.variable} ${poppins.variable} font-sans`} suppressHydrationWarning>
           {children}
         </body>
       </html>
