@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { MessageSquare, ArrowRight, FileText, Zap, Send, CheckCircle, ArrowDown } from "lucide-react";
+import { MessageSquare, Zap, FileText, Send, CheckCircle, ArrowDown, Sparkles, User } from "lucide-react";
 
 const STEPS = [
     { id: 1, label: "Message envoyé", color: "bg-accent" },
@@ -44,7 +44,7 @@ export function ScrollAnimation() {
 
     return (
         <section ref={containerRef} className="min-h-[150vh] relative bg-gradient-to-b from-cream to-white">
-            {/* Vertical Progress Bar */}
+            {/* Vertical Progress Bar (Desktop) */}
             <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-3">
                 <div className="relative h-32 w-1 bg-gray-200 rounded-full overflow-hidden">
                     <motion.div
@@ -66,191 +66,240 @@ export function ScrollAnimation() {
                             }}
                             className="flex items-center gap-2"
                         >
-                            <div className={`w-2 h-2 rounded-full ${step.color}`} />
-                            <span className="text-xs font-medium text-gray-500 whitespace-nowrap">
+                            <div className={`w-2 h-2 rounded-full ${step.color} shadow-sm`} />
+                            {/* Label hidden to reduce clutter, could be shown on hover */}
+                            {/* <span className="text-xs font-medium text-gray-500 whitespace-nowrap">
                                 {step.label}
-                            </span>
+                            </span> */}
                         </motion.div>
                     ))}
                 </div>
             </div>
 
             <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
-                <div className="max-w-5xl mx-auto px-6 w-full">
+                <div className="max-w-6xl mx-auto px-6 w-full">
                     {/* Header */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="text-center mb-12 md:mb-16"
+                        className="text-center mb-12 md:mb-20"
                     >
-                        <span className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
-                            <Zap size={14} />
+                        <span className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 text-accent px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+                            <Zap size={12} />
                             Comment ça fonctionne
                         </span>
-                        <h2 className="text-3xl md:text-4xl font-head font-bold text-deep mb-4">
-                            Du message à la solution
+                        <h2 className="text-3xl md:text-5xl font-head font-bold text-deep mb-4">
+                            Du message à l'action
                         </h2>
-                        <p className="text-gray-600 max-w-lg mx-auto">
-                            Suivez le parcours d'un retour d'expérience en temps réel
+                        <p className="text-gray-600 max-w-lg mx-auto text-lg">
+                            L'IA transforme les mots en opportunités managériales en temps réel.
                         </p>
                     </motion.div>
 
-                    {/* Animation Container */}
-                    <div className="relative h-[350px] md:h-[400px] flex items-center justify-center">
-                        {/* Step 1: Message sent */}
+                    {/* Animation Visualization */}
+                    <div className="relative h-[400px] flex items-center justify-center">
+
+                        {/* ========================================================
+                            STEP 1: Message (Premium Glass Bubble)
+                        ======================================================== */}
                         <motion.div
                             style={{ opacity: messageOpacity, y: messageY }}
-                            className="absolute left-0 md:left-4 top-1/2 -translate-y-1/2 w-[250px] md:w-[280px]"
+                            className="absolute left-0 md:left-[5%] top-1/2 -translate-y-1/2 w-[300px] md:w-[320px] z-10"
                         >
                             <motion.div
                                 style={{ scale: sendScale }}
-                                className="bg-white rounded-[24px] p-5 md:p-6 shadow-lg border border-gray-100 relative"
+                                className="glass-enhanced rounded-3xl p-6 shadow-2xl border border-white/40 relative overflow-hidden group"
                             >
-                                {/* Step Badge */}
-                                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-sm font-bold shadow-lg">
-                                    1
+                                {/* Decorative gradient blur */}
+                                <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-all duration-500" />
+
+                                <div className="flex items-start gap-4 mb-4 relative z-10">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 border border-white flex items-center justify-center shadow-inner">
+                                        <User className="text-gray-500" size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="font-bold text-sm text-deep flex justify-between items-center">
+                                            <span>Collaborateur</span>
+                                            <span className="text-[10px] text-gray-400 font-medium">10:42</span>
+                                        </div>
+                                        <div className="text-xs text-accent font-medium">via Clao</div>
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                                        <MessageSquare className="text-accent" size={20} />
-                                    </div>
-                                    <div>
-                                        <div className="font-bold text-sm text-deep">Collaborateur</div>
-                                        <div className="text-xs text-gray-500">via Clao</div>
-                                    </div>
+                                <div className="bg-white/60 rounded-2xl p-4 rounded-tl-none shadow-sm border border-white/50 relative z-10">
+                                    <p className="text-deep/90 text-sm leading-relaxed font-medium">
+                                        "J'ai besoin de plus de feedback sur mon travail. Je ne sais pas toujours si je suis sur la bonne voie."
+                                    </p>
                                 </div>
-                                <p className="text-sm text-gray-700 leading-relaxed">
-                                    "J'ai besoin de plus de feedback sur mon travail. Je ne sais pas toujours si je suis sur la bonne voie."
-                                </p>
+
                                 <motion.div
                                     style={{ opacity: sendProgress }}
-                                    className="mt-4 flex items-center gap-2 text-accent text-xs font-medium"
+                                    className="mt-4 flex items-center justify-end gap-2 text-accent text-xs font-bold"
                                 >
-                                    <Send size={14} />
-                                    Retour d'expérience envoyé
+                                    <span>Envoyé</span>
+                                    <div className="bg-accent text-white p-1 rounded-full">
+                                        <Send size={10} />
+                                    </div>
                                 </motion.div>
                             </motion.div>
                         </motion.div>
 
-                        {/* Step 2: Processing */}
+                        {/* ========================================================
+                            STEP 2: Processing (Pulse/Radar Effect)
+                        ======================================================== */}
                         <motion.div
                             style={{ opacity: processingOpacity, scale: processingScale }}
-                            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
                         >
-                            <div className="relative">
-                                {/* Step Badge */}
-                                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-deep text-white flex items-center justify-center text-sm font-bold shadow-lg z-10">
-                                    2
-                                </div>
+                            <div className="relative w-40 h-40 flex items-center justify-center">
+                                {/* Outer Ripples */}
+                                <motion.div
+                                    animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="absolute inset-0 rounded-full border border-accent/20"
+                                />
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+                                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                                    className="absolute inset-4 rounded-full border border-accent/30"
+                                />
 
-                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-deep flex items-center justify-center shadow-2xl">
+                                {/* Core */}
+                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-deep to-accent shadow-[0_0_30px_rgba(58,133,119,0.4)] flex items-center justify-center z-10 relative overflow-hidden">
                                     <motion.div
                                         animate={{ rotate: 360 }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                        className="relative"
-                                    >
-                                        <Zap className="text-accent" size={28} />
-                                    </motion.div>
+                                        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                                        className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,rgba(255,255,255,0.3)_360deg)]"
+                                    />
+                                    <Sparkles className="text-white relative z-10" size={32} />
                                 </div>
-                            </div>
-                            <div className="mt-4 text-center">
-                                <div className="text-sm font-bold text-deep">Analyse IA</div>
-                                <div className="text-xs text-gray-500">30 secondes</div>
+
+                                {/* Label */}
+                                <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+                                    <div className="text-sm font-bold text-deep bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm border border-gray-100">
+                                        Analyse IA
+                                    </div>
+                                    <div className="text-[10px] text-gray-500 font-medium mt-1">
+                                        ~30 secondes
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
 
-                        {/* Step 3: Solution appears */}
+                        {/* ========================================================
+                            STEP 3: Solution (Premium Doc Card)
+                        ======================================================== */}
                         <motion.div
                             style={{ opacity: solutionOpacity, y: solutionY }}
-                            className="absolute right-0 md:right-4 top-1/2 -translate-y-1/2 w-[280px] md:w-[320px]"
+                            className="absolute right-0 md:right-[5%] top-1/2 -translate-y-1/2 w-[320px] md:w-[350px] z-10"
                         >
                             <motion.div
                                 style={{ opacity: managerOpacity, x: managerX }}
-                                className="bg-white rounded-[24px] p-5 md:p-6 shadow-xl border-2 border-accent/20 relative"
+                                className="bg-white rounded-3xl p-0 shadow-2xl border border-gray-100 relative overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500"
                             >
-                                {/* Step Badge */}
-                                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold shadow-lg">
-                                    3
+                                {/* Header Strip */}
+                                <div className="bg-deep px-6 py-4 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-sm">
+                                            <FileText className="text-white" size={16} />
+                                        </div>
+                                        <div>
+                                            <div className="text-xs font-bold text-white/90 uppercase tracking-widest">Plan d'action</div>
+                                            <div className="text-[10px] text-white/60">Généré il y a 2min</div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-green-500/20 border border-green-500/30 text-green-400 text-[10px] font-bold px-2 py-1 rounded">
+                                        PRIORITAIRE
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 rounded-full bg-deep flex items-center justify-center">
-                                        <FileText className="text-white" size={20} />
-                                    </div>
-                                    <div>
-                                        <div className="font-bold text-sm text-deep">REX Manager</div>
-                                        <div className="text-xs text-gray-500">Plan d'action</div>
-                                    </div>
-                                </div>
+                                {/* Content */}
+                                <div className="p-6">
+                                    <div className="space-y-4">
+                                        <div className="bg-cream/50 rounded-xl p-4 border border-gray-100">
+                                            <div className="text-xs font-bold text-accent mb-1 uppercase">Recommandation</div>
+                                            <p className="text-sm text-deep font-medium leading-snug">
+                                                Instaurer un point hebdomadaire de 15 min focus "Feedback & Développement".
+                                            </p>
+                                        </div>
 
-                                <div className="space-y-3">
-                                    <div className="bg-light rounded-lg p-3">
-                                        <div className="text-xs font-bold text-accent mb-1">Recommandation</div>
-                                        <p className="text-xs text-gray-600">
-                                            Instaurer un point hebdomadaire de 15 min pour partager les retours.
-                                        </p>
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer group">
+                                                <div className="text-green-500 bg-green-50 rounded-full p-1 group-hover:scale-110 transition-transform">
+                                                    <CheckCircle size={14} />
+                                                </div>
+                                                <span className="text-xs text-gray-600 font-medium group-hover:text-deep transition-colors">Mail d'invitation pré-rédigé</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer group">
+                                                <div className="text-green-500 bg-green-50 rounded-full p-1 group-hover:scale-110 transition-transform">
+                                                    <CheckCircle size={14} />
+                                                </div>
+                                                <span className="text-xs text-gray-600 font-medium group-hover:text-deep transition-colors">Guide d'entretien structuré</span>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2 text-xs text-deep">
-                                        <CheckCircle size={14} className="text-green-600" />
-                                        <span>Mail pré-rédigé disponible</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-xs text-deep">
-                                        <CheckCircle size={14} className="text-green-600" />
-                                        <span>Guide de réunion prêt</span>
+                                    <div className="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
+                                        <div className="flex -space-x-2">
+                                            <div className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white" />
+                                            <div className="w-6 h-6 rounded-full bg-gray-300 border-2 border-white" />
+                                        </div>
+                                        <div className="text-xs font-bold text-accent cursor-pointer hover:underline">
+                                            Voir le détail &rarr;
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
                         </motion.div>
 
-                        {/* Connection Lines - SVG */}
+                        {/* Connection Lines (Desktop only) */}
                         <motion.svg
-                            className="absolute inset-0 w-full h-full pointer-events-none hidden md:block"
+                            className="absolute inset-0 w-full h-full pointer-events-none hidden md:block -z-10"
                             style={{ opacity: processingOpacity }}
                         >
                             <defs>
                                 <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#3A8577" />
-                                    <stop offset="100%" stopColor="#20372F" />
+                                    <stop offset="0%" stopColor="#3A8577" stopOpacity="0" />
+                                    <stop offset="50%" stopColor="#3A8577" stopOpacity="0.5" />
+                                    <stop offset="100%" stopColor="#20372F" stopOpacity="0" />
                                 </linearGradient>
                             </defs>
-                            <motion.line
-                                x1="280"
-                                y1="50%"
-                                x2="calc(50% - 60px)"
-                                y2="50%"
+                            <motion.path
+                                d="M320 200 C 400 200, 400 200, 480 200"
                                 stroke="url(#lineGradient)"
                                 strokeWidth="2"
-                                strokeDasharray="8,4"
+                                fill="none"
+                                strokeDasharray="4 4"
                                 style={{ pathLength: sendProgress }}
                             />
-                            <motion.line
-                                x1="calc(50% + 60px)"
-                                y1="50%"
-                                x2="calc(100% - 320px)"
-                                y2="50%"
+                            <motion.path
+                                d="M640 200 C 720 200, 720 200, 800 200"
                                 stroke="url(#lineGradient)"
                                 strokeWidth="2"
-                                strokeDasharray="8,4"
+                                fill="none"
+                                strokeDasharray="4 4"
                                 style={{ pathLength: solutionOpacity }}
                             />
                         </motion.svg>
                     </div>
 
-                    {/* Scroll indicator */}
+                    {/* Scroll indicator with fade out */}
                     <motion.div
-                        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400"
-                        style={{ opacity: useTransform(scrollYProgress, [0, 0.3], [1, 0]) }}
+                        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+                        style={{ opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]) }}
                     >
-                        <span className="text-xs font-medium">Scrollez pour découvrir</span>
+                        <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Découvrir le process</span>
                         <motion.div
-                            animate={{ y: [0, 8, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                            className="w-8 h-8 rounded-full bg-white/80 backdrop-blur flex items-center justify-center shadow-md"
+                            animate={{ y: [0, 6, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            className="w-6 h-10 rounded-full border-2 border-gray-200 flex justify-center p-1"
                         >
-                            <ArrowDown size={16} className="text-accent" />
+                            <motion.div
+                                animate={{ height: ["20%", "50%", "20%"] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                className="w-1 bg-accent/50 rounded-full"
+                            />
                         </motion.div>
                     </motion.div>
                 </div>
