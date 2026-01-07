@@ -271,9 +271,9 @@ export function ScrollAnimation() {
                                     style={{ pathLength: sendProgress, opacity: 0.3 }}
                                 />
 
-                                {/* Animated Arrow from AI to Solution (Solid & Animated) */}
+                                {/* Animated Arrow from AI to Solution (Curved & Organic) */}
                                 <motion.path
-                                    d="M580 200 L680 200"
+                                    d="M 580 200 Q 650 140 720 200"
                                     stroke="#3A8577"
                                     strokeWidth="3"
                                     fill="none"
