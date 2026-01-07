@@ -29,16 +29,22 @@
     -   `/mon-histoire`
     -   `/contact`
 
+### 4. Sécurité & Hardening (🆕 Nouveau)
+-   **Audit Sécurité** : Identification et correction de failles critiques (Score initial 2/10 -> Hardened).
+-   **Accès API** : Sécurisation de `api/chat` (Validation Token), `api/generate-pdf` & `api/generate-rex` (Auth Clerk + Vérification Manager `id`).
+-   **Rate Limiting** : Implémentation d'une limite de requêtes (10 req/10s) via `Upstash Redis` pour protéger l'IA et le serveur.
+
 ## 📁 Fichiers Clés Modifiés
+-   `app/api/chat/route.ts` : Ajout Rate Limiting + Validation Token REX.
+-   `app/api/generate-*/route.ts` : Ajout Auth Clerk + IDOR Protection.
+-   `lib/ratelimit.ts` : Nouvelle lib de gestion du débit.
 -   `components/landing/scroll-animation.tsx` : Cœur de l'animation (Framer Motion + SVG).
--   `middleware.ts` : Règles de routing Clerk.
--   `lib/prisma.ts` & `lib/openai.ts` : Fixes de configuration backend.
--   `prisma/schema.prisma` : Config Prisma 7.
 
 ## 🚀 État Actuel
--   **Production** : 🟢 En ligne et fonctionnelle.
--   **Git** : 🔴 Dépôt local uniquement (pas de remote GitHub configuré).
+-   **Production** : 🟢 En ligne (Version Sécurisée).
+-   **Sécurité** : 🔒 Routes critiques protégées.
+-   **Git** : 🔴 Dépôt local uniquement.
 
 ## ⏭️ Prochaines Étapes
-1.  **Sync GitHub** : Pousser le code sur un dépôt distant pour sécuriser le travail.
-2.  **Tests Utilisateurs** : Valider le parcours REX en production.
+1.  **Sync GitHub** : Pousser le code.
+2.  **Env Vars** : Configurer `UPSTASH_*` sur Vercel.

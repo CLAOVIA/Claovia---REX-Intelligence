@@ -5,9 +5,19 @@ import {
   generateInterviewGuide,
 } from "@/lib/openai";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
   try {
+    // 1. Authentication
+    const { userId: clerkId } = await auth();
+    if (!clerkId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const { rexId } = await req.json();
 
     if (!rexId) {
@@ -17,55 +27,74 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // TODO: Get REX from database
-    // const rex = await prisma.rex.findUnique({
-    //   where: { id: rexId },
-    //   include: {
-    //     invitation: {
-    //       include: {
-    //         user: true
-    //       }
-    //     }
-    //   }
-    // });
+    // 2. Authorization: Verify User & Ownership
+    const user = await prisma.user.findUnique({
+      where: { clerkId }
+    });
 
-    // if (!rex || rex.status !== "COMPLETED") {
-    //   return NextResponse.json(
-    //     { error: "REX not found or not completed" },
-    //     { status: 404 }
-    //   );
-    // }
+    if (!user) {
+      return NextResponse.json(
+        { error: "User not found" },
+        { status: 404 }
+      );
+    }
 
-    // Mock data for development
-    const mockMessages = [
-      { role: "assistant", content: "Bonjour, comment vas-tu ?" },
-      {
-        role: "user",
-        content:
-          "Honnêtement, c'est très intense. Le projet Alpha me prend beaucoup de temps.",
-      },
-      {
-        role: "assistant",
-        content: "Peux-tu m'en dire plus sur cette charge de travail ?",
-      },
-      {
-        role: "user",
-        content:
-          "Les priorités changent souvent et j'ai du mal à déléguer certaines tâches.",
-      },
-    ];
+    const rex = await prisma.rex.findUnique({
+      where: { id: rexId },
+    });
 
-    const collaboratorName = "Sophie Martin";
+    if (!rex) {
+      return NextResponse.json(
+        { error: "REX not found" },
+        { status: 404 }
+      );
+    }
+
+    // IDOR Protection
+    if (rex.managerId !== user.id && user.role !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 }
+      );
+    }
+
+    // Check status
+    if (rex.status !== "COMPLETED") {
+      // If already analyzed, maybe return existing analysis?
+      if (rex.status === "ANALYZED") {
+        return NextResponse.json({
+          success: true,
+          message: "REX already analyzed",
+          analysis: rex.analysisData
+        });
+      }
+      return NextResponse.json(
+        { error: "REX not ready for analysis" },
+        { status: 400 }
+      );
+    }
+
+    // Use Real Data
+    const messages = rex.conversationData as any[];
+    // basic validation of messages structure if needed
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return NextResponse.json(
+        { error: "No conversation data found" },
+        { status: 400 }
+      );
+    }
+
+    const collaboratorName = `${rex.collaborateurPrenom} ${rex.collaborateurNom || ''}`.trim();
 
     // Analyze conversation with OpenAI
     const { analysis } = await analyzeRexConversation(
-      mockMessages,
+      messages,
       collaboratorName
     );
 
-    // Generate manager kit if there are high-priority recommendations
+    // Generate manager kit if there are key recommendations
     const highPriorityRec = analysis.recommendations?.find(
-      (r: any) => r.priority === "high"
+      (r: any) => r.priority === "high" || r.priority === "medium" // broadened for demo
     );
 
     let managerKit: Array<{ type: string; title: string; status: string; content: string }> = [];
@@ -100,20 +129,20 @@ export async function POST(req: NextRequest) {
       ];
     }
 
-    // TODO: Save analysis to database
-    // await prisma.rex.update({
-    //   where: { id: rexId },
-    //   data: {
-    //     status: "ANALYZED",
-    //     analysis: {
-    //       ...analysis,
-    //       managerKit
-    //     },
-    //     analyzedAt: new Date()
-    //   }
-    // });
+    // Save analysis to database
+    await prisma.rex.update({
+      where: { id: rexId },
+      data: {
+        status: "ANALYZED",
+        analysisData: { // Schema uses analysisData not analysis
+          ...analysis,
+          managerKit
+        },
+        analyzedAt: new Date()
+      }
+    });
 
-    // TODO: Send notification to manager
+    // Send notification (placeholder)
     // await sendManagerNotification(rex.managerId, rexId);
 
     return NextResponse.json({

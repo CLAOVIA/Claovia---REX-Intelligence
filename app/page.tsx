@@ -22,98 +22,22 @@ import {
   FAQSection,
   TestimonialsSection
 } from "@/components/landing/social-proof";
+import { HeroSplit3D } from "@/components/landing/HeroSplit3D";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-cream font-sans text-deep selection:bg-accent selection:text-white overflow-x-hidden">
       <Navbar />
 
+      <Navbar />
+
       {/* =====================================================
-          HERO SECTION with Animated Gradient
+          HERO SECTION (Updated Master Vision)
+          Split Screen: Chat (Left) -> 3D REX (Right)
       ===================================================== */}
-      <section className="pt-32 pb-12 px-4 animated-gradient-bg relative overflow-hidden">
-        {/* Decorative Elements */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-10 w-96 h-96 bg-deep/5 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur border border-accent/20 px-4 py-2 rounded-full mb-8 shadow-sm"
-          >
-            <Zap className="w-4 h-4 text-accent" />
-            <span className="text-sm font-semibold text-accent">
-              Intelligence Managériale par l'IA
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-head font-bold text-deep mb-6 leading-tight"
-          >
-            1 Retour d'Expérience. <br />
-            <span className="text-gradient bg-gradient-to-r from-accent to-deep bg-clip-text">1 Plan d'Accompagnement.</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed"
-          >
-            Arrêtez de collecter de la donnée pour faire des stats. <br />
-            Collectez-la pour <strong className="text-deep">accompagner maintenant</strong>.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-wrap items-center justify-center gap-6 text-sm font-medium text-gray-600 mb-10"
-          >
-            <span className="flex items-center gap-2">
-              <Check size={16} className="text-accent" /> Sans configuration
-            </span>
-            <span className="flex items-center gap-2">
-              <Check size={16} className="text-accent" /> Résultats immédiats
-            </span>
-            <span className="flex items-center gap-2">
-              <Check size={16} className="text-accent" /> ROI mesurable
-            </span>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-4"
-          >
-            <a
-              href="https://typebot.co/claovia-rex-clao-ia-05gi2vb"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-deep text-white px-8 py-4 rounded-xl font-bold hover:bg-accent transition-all shadow-lg hover:shadow-xl hover:shadow-accent/20 touch-target"
-            >
-              <Play size={20} />
-              Lancer 1 Retour d'Expérience
-            </a>
-            <Link
-              href="/fonctionnalites"
-              className="inline-flex items-center gap-2 bg-white text-deep border-2 border-gray-200 px-8 py-4 rounded-xl font-bold hover:border-accent hover:text-accent transition-all touch-target"
-            >
-              Découvrir les fonctionnalités
-              <ArrowRight size={20} />
-            </Link>
-          </motion.div>
-
-          {/* Trust Badges */}
-          <TrustBadges />
-        </div>
-      </section>
+      <div className="pt-20"> {/* Offset for Fixed Navbar */}
+        <HeroSplit3D />
+      </div>
 
       {/* =====================================================
           SOCIAL PROOF - Stats & Quick Testimonial

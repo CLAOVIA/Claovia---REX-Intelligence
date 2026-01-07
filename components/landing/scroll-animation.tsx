@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Zap, FileText, Send, CheckCircle, Sparkles, User, ChevronDown } from "lucide-react";
+import { Zap, FileText, Send, CheckCircle, Sparkles, User, MousePointer2 } from "lucide-react";
 
 const STEPS = [
     { id: 1, label: "Message envoyé", color: "bg-accent" },
@@ -18,33 +18,46 @@ export function ScrollAnimation() {
         offset: ["start end", "end start"],
     });
 
-    // Animation phases - SÉQUENCE CLAIRE
-    const messageOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-    const messageY = useTransform(scrollYProgress, [0, 0.15], [40, 0]);
+    // Animation phases based on scroll - optimized for 140vh to allow descent
+    const messageOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+    const messageY = useTransform(scrollYProgress, [0, 0.2], [50, 0]);
 
-    const sendProgress = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
+    const sendProgress = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
+    const sendScale = useTransform(scrollYProgress, [0.2, 0.35], [1, 0.9]);
 
-    const processingOpacity = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
-    const processingScale = useTransform(scrollYProgress, [0.3, 0.45], [0.9, 1]);
+    const processingOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
+    const processingScale = useTransform(scrollYProgress, [0.35, 0.5], [0.8, 1]);
 
-    const arrowProgress = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+    // Arrow animation starts as processing finishes
+    const arrowProgress = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
 
-    const solutionOpacity = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
-    const solutionY = useTransform(scrollYProgress, [0.6, 0.75], [40, 0]);
+    const solutionOpacity = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
+    const solutionY = useTransform(scrollYProgress, [0.6, 0.8], [30, 0]);
 
-    // Curseur qui pointe vers le bas
-    const mouseOpacity = useTransform(scrollYProgress, [0.75, 0.8, 0.95, 1.0], [0, 1, 1, 0]);
+    const managerOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
+    const managerX = useTransform(scrollYProgress, [0.75, 0.9], [50, 0]);
+
+    // Descent animation: Mouse travels down from Action Plan to bottom
+    const descentProgress = useTransform(scrollYProgress, [0.8, 1], [0, 1]);
+
+    // Map descent progress to vertical position (from card height to well below the container to bridge sections)
+    // Starting at ~200px (card center), going down to 600px (off-screen bottom)
+    const mouseY = useTransform(scrollYProgress, [0.8, 1], [200, 600]);
+    const mouseX = useTransform(scrollYProgress, [0.8, 1], [740, 500]); // Curve back to center
+
+    // Opacity handling: fade in then stay visible until it scrolls out
+    const mouseOpacity = useTransform(scrollYProgress, [0.8, 0.85], [0, 1]);
 
     // Progress for vertical bar
     const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
     // Step indicators
-    const step1Active = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-    const step2Active = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
-    const step3Active = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
+    const step1Active = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+    const step2Active = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
+    const step3Active = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
 
     return (
-        <section ref={containerRef} className="min-h-[140vh] relative bg-gradient-to-b from-cream to-white">
+        <section ref={containerRef} className="min-h-[140vh] relative bg-gradient-to-b from-cream to-white overflow-hidden">
             {/* Vertical Progress Bar (Desktop) */}
             <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-3">
                 <div className="relative h-32 w-1 bg-gray-200 rounded-full overflow-hidden">
@@ -104,7 +117,9 @@ export function ScrollAnimation() {
                             style={{ opacity: messageOpacity, y: messageY }}
                             className="absolute left-0 md:left-[5%] top-1/2 -translate-y-1/2 w-[300px] md:w-[320px] z-10"
                         >
-                            <div className="glass-enhanced rounded-3xl p-6 shadow-2xl border border-white/40 relative overflow-hidden group"
+                            <motion.div
+                                style={{ scale: sendScale }}
+                                className="glass-enhanced rounded-3xl p-6 shadow-2xl border border-white/40 relative overflow-hidden group"
                             >
                                 {/* Decorative gradient blur */}
                                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-all duration-500" />
@@ -137,7 +152,7 @@ export function ScrollAnimation() {
                                         <Send size={10} />
                                     </div>
                                 </motion.div>
-                            </div>
+                            </motion.div>
                         </motion.div>
 
                         {/* ========================================================
@@ -189,7 +204,9 @@ export function ScrollAnimation() {
                             style={{ opacity: solutionOpacity, y: solutionY }}
                             className="absolute right-0 md:right-[5%] top-1/2 -translate-y-1/2 w-[320px] md:w-[350px] z-10"
                         >
-                            <div className="bg-white rounded-3xl p-0 shadow-2xl border border-gray-100 relative overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500"
+                            <motion.div
+                                style={{ opacity: managerOpacity, x: managerX }}
+                                className="bg-white rounded-3xl p-0 shadow-2xl border border-gray-100 relative overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500"
                             >
                                 {/* Header Strip */}
                                 <div className="bg-deep px-6 py-4 flex items-center justify-between">
@@ -224,10 +241,26 @@ export function ScrollAnimation() {
                                                 </div>
                                                 <span className="text-xs text-gray-600 font-medium group-hover:text-deep transition-colors">Mail d'invitation pré-rédigé</span>
                                             </div>
+                                            <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer group">
+                                                <div className="text-green-500 bg-green-50 rounded-full p-1 group-hover:scale-110 transition-transform">
+                                                    <CheckCircle size={14} />
+                                                </div>
+                                                <span className="text-xs text-gray-600 font-medium group-hover:text-deep transition-colors">Guide d'entretien structuré</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
+                                        <div className="flex -space-x-2">
+                                            <div className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white" />
+                                            <div className="w-6 h-6 rounded-full bg-gray-300 border-2 border-white" />
+                                        </div>
+                                        <div className="text-xs font-bold text-accent cursor-pointer hover:underline">
+                                            Voir le détail &rarr;
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         </motion.div>
 
                         <motion.svg
@@ -249,7 +282,7 @@ export function ScrollAnimation() {
                                 </marker>
                             </defs>
 
-                            {/* Line from Message to AI (Dotted - STATIQUE) */}
+                            {/* Line from Message to AI (Dotted & Flowing) */}
                             <motion.path
                                 d="M320 200 L420 200"
                                 stroke="url(#premiumArrowGradient)"
@@ -257,9 +290,12 @@ export function ScrollAnimation() {
                                 strokeDasharray="6 4"
                                 fill="none"
                                 style={{ pathLength: sendProgress, opacity: 0.5 }}
+                                animate={{ strokeDashoffset: [0, -20] }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                             />
 
-                            {/* Premium Animated Curve from AI to Solution - HORIZONTAL */}
+                            {/* Premium Animated Curve from AI to Solution */}
+                            {/* Uses Cubic Bezier for smoother "S" curve feel */}
                             <motion.path
                                 d="M 580 200 C 620 200, 640 100, 740 200"
                                 stroke="url(#premiumArrowGradient)"
@@ -271,38 +307,30 @@ export function ScrollAnimation() {
                                 style={{ pathLength: arrowProgress }}
                             />
 
-                            {/* Arrow pointing DOWN from solution */}
+                            {/* Descent Line to next section (Dashed) */}
+                            {/* Starts from where the previous arrow ends (approx center right card) and goes down */}
                             <motion.path
-                                d="M 800 280 L 800 360"
+                                d="M 740 200 Q 800 350 500 600"
                                 stroke="url(#premiumArrowGradient)"
-                                strokeWidth="3"
+                                strokeWidth="2"
+                                strokeDasharray="4 4"
                                 fill="none"
-                                markerEnd="url(#arrowheadPremium)"
-                                strokeLinecap="round"
-                                strokeDasharray="6 6"
-                                style={{ pathLength: arrowProgress, opacity: 0.7 }}
+                                style={{ pathLength: descentProgress, opacity: 0.5 }}
                             />
-
                         </motion.svg>
 
-                        {/* Curseur pointant vers le bas - VERT CLAOVIA */}
+                        {/* Mouse Cursor traveling down */}
                         <motion.div
-                            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50"
-                            style={{ opacity: mouseOpacity }}
+                            className="absolute z-50 text-accent filter drop-shadow-md"
+                            style={{
+                                opacity: mouseOpacity,
+                                left: 0,
+                                top: 0,
+                                x: mouseX,
+                                y: mouseY
+                            }}
                         >
-                            <motion.div
-                                className="flex flex-col items-center gap-3"
-                                animate={{ y: [0, 8, 0] }}
-                                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                            >
-                                <div className="text-xs md:text-sm font-medium text-gray-600 bg-white/95 backdrop-blur-md px-4 md:px-6 py-2 md:py-3 rounded-full shadow-xl border border-gray-200 text-center">
-                                    <span className="hidden sm:inline">Continuez pour découvrir </span>
-                                    <span className="font-bold text-accent">l'histoire de Marie</span>
-                                </div>
-                                <div className="w-10 h-10 rounded-full border-2 border-accent bg-white flex items-center justify-center shadow-lg">
-                                    <ChevronDown className="text-accent" size={20} strokeWidth={2.5} />
-                                </div>
-                            </motion.div>
+                            <MousePointer2 size={24} fill="#3A8577" className="text-white" />
                         </motion.div>
 
                     </div>

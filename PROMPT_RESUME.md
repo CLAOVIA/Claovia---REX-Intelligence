@@ -19,7 +19,13 @@
 2.  **OpenAI** : Initialiser le client DANS les fonctions (`getOpenAIClient()`), pas en global, pour éviter les erreurs de build Vercel.
 3.  **Middleware** : Toujours vérifier `middleware.ts` si ajout de nouvelles pages publiques.
 
+## 🔐 Sécurité API
+-   **Rate Limiting** : `Upstash` (Redis) utilisé sur `api/chat`.
+-   **Access Control** :
+    -   `api/chat` : Token REX requis.
+    -   `api/generate-*` : Auth Clerk + Vérification stricte `rex.managerId === user.id`.
+
 ## 📝 Dernières Modifications Majeures
+-   Audit & Hardening Sécurité API (7/1/2026).
 -   Redesign complet section "Comment ça marche" (Flèche SVG animée, Mouse Descent).
 -   Fix build Vercel (Prisma/OpenAI).
--   Ouverture des pages landing publiques.
