@@ -83,8 +83,8 @@ export default function Fonctionnalites() {
 
             {/* Features Grid */}
             <section className="py-20 bg-white">
-                <div className="max-w-6xl mx-auto px-6">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid md:grid-cols-2 gap-8">
                         {features.map((feature, index) => (
                             <motion.div
                                 key={feature.title}
@@ -92,25 +92,29 @@ export default function Fonctionnalites() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="bg-cream rounded-[28px] p-8"
+                                className="bg-gradient-to-br from-white to-cream rounded-3xl p-8 border border-gray-100 shadow-lg hover:shadow-xl transition-all"
                             >
-                                <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6">
-                                    <feature.icon className="text-accent" size={28} />
+                                <div className="flex items-start gap-4 mb-6">
+                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-accent-dark flex items-center justify-center shadow-lg">
+                                        <feature.icon className="text-white" size={28} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="text-2xl font-head font-bold text-deep mb-2">
+                                            {feature.title}
+                                        </h3>
+                                        <p className="text-gray-600 leading-relaxed text-base">
+                                            {feature.description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <h3 className="text-xl font-head font-bold text-deep mb-3">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-gray-600 mb-6 leading-relaxed">
-                                    {feature.description}
-                                </p>
-                                <ul className="space-y-2">
+                                <div className="flex flex-wrap gap-2">
                                     {feature.benefits.map((benefit) => (
-                                        <li key={benefit} className="flex items-center gap-2 text-sm text-gray-700">
-                                            <CheckCircle size={16} className="text-accent shrink-0" />
+                                        <span key={benefit} className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full text-sm font-medium text-gray-700 border border-gray-200 shadow-sm">
+                                            <CheckCircle size={14} className="text-accent" />
                                             {benefit}
-                                        </li>
+                                        </span>
                                     ))}
-                                </ul>
+                                </div>
                             </motion.div>
                         ))}
                     </div>

@@ -224,22 +224,6 @@ export function ScrollAnimation() {
                                                 </div>
                                                 <span className="text-xs text-gray-600 font-medium group-hover:text-deep transition-colors">Mail d'invitation pré-rédigé</span>
                                             </div>
-                                            <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer group">
-                                                <div className="text-green-500 bg-green-50 rounded-full p-1 group-hover:scale-110 transition-transform">
-                                                    <CheckCircle size={14} />
-                                                </div>
-                                                <span className="text-xs text-gray-600 font-medium group-hover:text-deep transition-colors">Guide d'entretien structuré</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
-                                        <div className="flex -space-x-2">
-                                            <div className="w-6 h-6 rounded-full bg-gray-200 border-2 border-white" />
-                                            <div className="w-6 h-6 rounded-full bg-gray-300 border-2 border-white" />
-                                        </div>
-                                        <div className="text-xs font-bold text-accent cursor-pointer hover:underline">
-                                            Voir le détail &rarr;
                                         </div>
                                     </div>
                                 </div>
@@ -275,8 +259,7 @@ export function ScrollAnimation() {
                                 style={{ pathLength: sendProgress, opacity: 0.5 }}
                             />
 
-                            {/* Premium Animated Curve from AI to Solution */}
-                            {/* Uses Cubic Bezier for smoother "S" curve feel */}
+                            {/* Premium Animated Curve from AI to Solution - HORIZONTAL */}
                             <motion.path
                                 d="M 580 200 C 620 200, 640 100, 740 200"
                                 stroke="url(#premiumArrowGradient)"
@@ -286,6 +269,18 @@ export function ScrollAnimation() {
                                 markerEnd="url(#arrowheadPremium)"
                                 strokeLinecap="round"
                                 style={{ pathLength: arrowProgress }}
+                            />
+
+                            {/* Arrow pointing DOWN from solution */}
+                            <motion.path
+                                d="M 800 280 L 800 360"
+                                stroke="url(#premiumArrowGradient)"
+                                strokeWidth="3"
+                                fill="none"
+                                markerEnd="url(#arrowheadPremium)"
+                                strokeLinecap="round"
+                                strokeDasharray="6 6"
+                                style={{ pathLength: arrowProgress, opacity: 0.7 }}
                             />
 
                         </motion.svg>
