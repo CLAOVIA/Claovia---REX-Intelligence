@@ -5,7 +5,6 @@ import {
     MessageSquare,
     Zap,
     FileText,
-    Shield,
     Users,
     TrendingUp,
     Mail,
@@ -35,12 +34,6 @@ const features = [
         title: "Retour d'Expérience structuré",
         description: "Un document complet pour le manager : synthèse, analyse par thématique, plan d'action prioritaire.",
         benefits: ["Structure claire", "Pas de données brutes", "Actions prioritaires"],
-    },
-    {
-        icon: Shield,
-        title: "Anonymat garanti",
-        description: "Le collaborateur choisit : identifié ou anonyme. Technologie K-anonymity pour une protection maximale.",
-        benefits: ["Choix du collaborateur", "K-anonymity", "Mots jamais cités"],
     },
     {
         icon: Mail,

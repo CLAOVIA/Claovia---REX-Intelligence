@@ -42,16 +42,16 @@ const marieStory = {
     },
     conversation: [
         { sender: "bot", text: "👋 Salut Marie ! Moi c'est Clao. Comment tu vas aujourd'hui ?", delay: 0 },
-        { sender: "user", text: "Ça va, un peu fatiguée en ce moment.", delay: 2 },
-        { sender: "bot", text: "Je comprends. Comment ça se passe avec Laurent ces derniers temps ?", delay: 3.5 },
-        { sender: "user", text: "C'est pas toujours simple. On se voit peu.", delay: 5.5 },
-        { sender: "bot", text: "Tu peux m'en dire plus ?", delay: 7 },
-        { sender: "user", text: "J'ai l'impression de gérer mes dossiers toute seule. Peu de retours.", delay: 8.5 },
-        { sender: "bot", text: "Et côté charge de travail, comment tu gères ?", delay: 10.5 },
-        { sender: "user", text: "C'est dense. Les objectifs Q1 sont ambitieux.", delay: 12 },
-        { sender: "bot", text: "Sur 10, tu dirais quoi niveau motivation ?", delay: 14 },
-        { sender: "user", text: "Hmm... 6 peut-être. Ça dépend des jours.", delay: 15.5 },
-        { sender: "bot", text: "Merci Marie. Je transmets ça à Laurent avec des pistes concrètes.", delay: 17 },
+        { sender: "user", text: "Ça va, un peu fatiguée en ce moment.", delay: 1 },
+        { sender: "bot", text: "Je comprends. Comment ça se passe avec Laurent ces derniers temps ?", delay: 1.8 },
+        { sender: "user", text: "C'est pas toujours simple. On se voit peu.", delay: 2.8 },
+        { sender: "bot", text: "Tu peux m'en dire plus ?", delay: 3.5 },
+        { sender: "user", text: "J'ai l'impression de gérer mes dossiers toute seule. Peu de retours.", delay: 4.3 },
+        { sender: "bot", text: "Et côté charge de travail, comment tu gères ?", delay: 5.3 },
+        { sender: "user", text: "C'est dense. Les objectifs Q1 sont ambitieux.", delay: 6 },
+        { sender: "bot", text: "Sur 10, tu dirais quoi niveau motivation ?", delay: 7 },
+        { sender: "user", text: "Hmm... 6 peut-être. Ça dépend des jours.", delay: 7.8 },
+        { sender: "bot", text: "Merci Marie. Je transmets ça à Laurent avec des pistes concrètes.", delay: 8.5 },
     ],
     rex: {
         synthese: "Les réponses sont globalement nuancées. Marie exprime un besoin de reconnaissance et de feedback plus régulier de la part de son manager. La charge de travail est perçue comme soutenue, avec des objectifs ambitieux pour le trimestre.",
@@ -243,18 +243,18 @@ export function DemoSection() {
             );
         });
 
-        timers.push(setTimeout(() => !isPaused && setPhase("processing"), 18500));
-        timers.push(setTimeout(() => !isPaused && setPhase("rex"), 20500));
-        timers.push(setTimeout(() => !isPaused && setRexStep(1), 21500));
-        timers.push(setTimeout(() => !isPaused && setRexStep(2), 23000));
-        timers.push(setTimeout(() => !isPaused && setRexStep(3), 25000));
-        timers.push(setTimeout(() => !isPaused && setRexStep(4), 27000));
+        timers.push(setTimeout(() => !isPaused && setPhase("processing"), 9500));
+        timers.push(setTimeout(() => !isPaused && setPhase("rex"), 10500));
+        timers.push(setTimeout(() => !isPaused && setRexStep(1), 11000));
+        timers.push(setTimeout(() => !isPaused && setRexStep(2), 12000));
+        timers.push(setTimeout(() => !isPaused && setRexStep(3), 13000));
+        timers.push(setTimeout(() => !isPaused && setRexStep(4), 14000));
         timers.push(setTimeout(() => {
             if (!isPaused) {
                 setRexStep(5);
                 setIsComplete(true);
             }
-        }, 29000));
+        }, 15000));
 
         return () => timers.forEach(clearTimeout);
     }, [isPaused, demoKey]);
@@ -266,26 +266,77 @@ export function DemoSection() {
     };
 
     return (
-        <section className="py-20 px-4 bg-gradient-to-b from-cream via-light to-cream">
-            <div className="max-w-7xl mx-auto">
+        <section
+            id="histoire-marie"
+            className="relative py-20 px-4 bg-gradient-to-b from-cream via-light to-cream overflow-hidden"
+        >
+            {/* Animated background elements */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2 }}
+                className="absolute top-20 left-10 w-72 h-72 bg-accent/5 rounded-full blur-3xl pointer-events-none"
+            />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, delay: 0.2 }}
+                className="absolute bottom-20 right-10 w-96 h-96 bg-deep/5 rounded-full blur-3xl pointer-events-none"
+            />
+
+            <div className="max-w-7xl mx-auto relative z-10">
                 {/* Introduction */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
                     viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center mb-8"
                 >
-                    <div className="inline-flex items-center gap-2 bg-white border border-accent/20 px-4 py-2 rounded-full mb-4 shadow-sm">
+                    <motion.div
+                        initial={{ scale: 0, rotate: -180 }}
+                        whileInView={{ scale: 1, rotate: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, type: "spring", bounce: 0.4 }}
+                        className="inline-flex items-center gap-2 bg-white border border-accent/20 px-4 py-2 rounded-full mb-6 shadow-lg"
+                    >
                         <Play className="w-4 h-4 text-accent" />
                         <span className="text-sm font-semibold text-accent">Cas Concret</span>
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-head font-bold text-deep mb-4">
-                        L'histoire de Marie
-                    </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto">
-                        Marie est commerciale. Elle a besoin de plus d'échanges avec son manager. <br />
-                        Voyez comment Claovia génère un plan d'action concret.
-                    </p>
+                    </motion.div>
+
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="text-3xl md:text-5xl font-head font-bold mb-6 relative inline-block"
+                    >
+                        <span className="text-deep">L'histoire de </span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-deep relative">
+                            Marie
+                            <motion.span
+                                initial={{ scaleX: 0 }}
+                                whileInView={{ scaleX: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.5 }}
+                                className="absolute bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-accent to-deep origin-left rounded-full"
+                            />
+                        </span>
+                    </motion.h2>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg leading-relaxed"
+                    >
+                        Marie est commerciale. Elle a besoin de plus d'échanges avec son manager.
+                        <br className="hidden md:block" />
+                        <span className="font-semibold text-deep"> Voyez comment Claovia génère un plan d'action concret.</span>
+                    </motion.p>
                 </motion.div>
 
                 {/* Progress Timeline */}
@@ -373,15 +424,19 @@ export function DemoSection() {
                 </div>
 
                 {/* Demo Container */}
-                <div className="grid lg:grid-cols-2 gap-8 items-start">
+                <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-start">
                     {/* LEFT: Chat Collaborateur */}
                     <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, x: -50, rotateY: -15 }}
+                        whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
                     >
-                        <div className="bg-white rounded-[28px] border border-gray-200 shadow-xl overflow-hidden">
+                        <motion.div
+                            whileHover={{ scale: 1.02, rotateY: 2 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white rounded-[28px] border border-gray-200 shadow-2xl overflow-hidden transform-gpu perspective-1000"
+                        >
                             {/* Header */}
                             <div className="bg-gradient-to-r from-cream to-light border-b border-gray-200 p-4">
                                 <div className="flex items-center justify-between">
@@ -447,17 +502,21 @@ export function DemoSection() {
                                     <Play size={16} /> Tester le REX vous-même
                                 </a>
                             </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
 
                     {/* RIGHT: REX Manager */}
                     <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, x: 50, rotateY: 15 }}
+                        whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
+                        transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.3 }}
                     >
-                        <div className="bg-white rounded-[28px] border-2 border-deep/10 shadow-2xl overflow-hidden">
+                        <motion.div
+                            whileHover={{ scale: 1.02, rotateY: -2 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white rounded-[28px] border-2 border-deep/10 shadow-2xl overflow-hidden transform-gpu perspective-1000"
+                        >
                             {/* Header REX */}
                             <div className="bg-deep text-white p-4">
                                 <div className="flex items-center gap-3">
@@ -743,7 +802,7 @@ export function DemoSection() {
                                     )}
                                 </AnimatePresence>
                             </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 </div>
 
@@ -757,7 +816,7 @@ export function DemoSection() {
                     <div className="inline-flex items-center gap-4 bg-white rounded-full px-6 py-3 shadow-lg border border-gray-200">
                         <div className="flex items-center gap-2">
                             <div className="w-3 h-3 rounded-full bg-accent" />
-                            <span className="text-sm font-medium text-gray-600">10 min</span>
+                            <span className="text-sm font-medium text-gray-600">5 min</span>
                             <span className="text-xs text-gray-400">REX</span>
                         </div>
                         <ArrowRight className="text-gray-300" size={16} />
@@ -769,8 +828,8 @@ export function DemoSection() {
                         <ArrowRight className="text-gray-300" size={16} />
                         <div className="flex items-center gap-2">
                             <div className="w-3 h-3 rounded-full bg-green-500" />
-                            <span className="text-sm font-medium text-gray-600">24h</span>
-                            <span className="text-xs text-gray-400">Action Manager</span>
+                            <span className="text-sm font-medium text-gray-600">Instantané</span>
+                            <span className="text-xs text-gray-400">Kit Manager</span>
                         </div>
                     </div>
                 </motion.div>

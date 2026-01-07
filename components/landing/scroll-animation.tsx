@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Zap, FileText, Send, CheckCircle, Sparkles, User, MousePointer2 } from "lucide-react";
+import { Zap, FileText, Send, CheckCircle, Sparkles, User, MousePointer2, ChevronDown } from "lucide-react";
 
 const STEPS = [
     { id: 1, label: "Message envoyé", color: "bg-accent" },
@@ -18,32 +18,30 @@ export function ScrollAnimation() {
         offset: ["start end", "end start"],
     });
 
-    // Animation phases based on scroll - optimized for 140vh to allow descent
-    const messageOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-    const messageY = useTransform(scrollYProgress, [0, 0.2], [50, 0]);
+    // Animation phases based on scroll - ACCÉLÉRÉES
+    const messageOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
+    const messageY = useTransform(scrollYProgress, [0, 0.1], [50, 0]);
 
-    const sendProgress = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
-    const sendScale = useTransform(scrollYProgress, [0.2, 0.35], [1, 0.9]);
+    const sendProgress = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
+    const sendScale = useTransform(scrollYProgress, [0.1, 0.2], [1, 0.9]);
 
-    const processingOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
-    const processingScale = useTransform(scrollYProgress, [0.35, 0.5], [0.8, 1]);
+    const processingOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
+    const processingScale = useTransform(scrollYProgress, [0.2, 0.3], [0.8, 1]);
 
-    // Arrow animation starts as processing finishes
-    const arrowProgress = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
+    // Arrow animation - RAPIDE
+    const arrowProgress = useTransform(scrollYProgress, [0.3, 0.4], [0, 1]);
 
-    const solutionOpacity = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
-    const solutionY = useTransform(scrollYProgress, [0.6, 0.8], [30, 0]);
+    const solutionOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
+    const solutionY = useTransform(scrollYProgress, [0.35, 0.5], [30, 0]);
 
-    const managerOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
-    const managerX = useTransform(scrollYProgress, [0.75, 0.9], [50, 0]);
+    const managerOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+    const managerX = useTransform(scrollYProgress, [0.45, 0.6], [50, 0]);
 
-    // Descent animation: Mouse travels down from Action Plan to bottom
-    const descentProgress = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
-    // Map descent progress to vertical position (from card height to bottom of screen)
-    // Assuming card is around center (200px), moving down to 400px (bottom)
-    const mouseY = useTransform(scrollYProgress, [0.8, 0.95], [200, 450]);
-    const mouseX = useTransform(scrollYProgress, [0.8, 0.95], [740, 500]); // Curve back to center
-    const mouseOpacity = useTransform(scrollYProgress, [0.8, 0.85, 0.95], [0, 1, 0]);
+    // Descent animation: CURSEUR RAPIDE qui descend jusqu'en bas
+    const descentProgress = useTransform(scrollYProgress, [0.6, 1.0], [0, 1]);
+    const mouseY = useTransform(scrollYProgress, [0.6, 0.8, 1.0], [200, 500, 700]);
+    const mouseX = useTransform(scrollYProgress, [0.6, 0.75, 1.0], [740, 520, 500]);
+    const mouseOpacity = useTransform(scrollYProgress, [0.6, 0.65, 0.98, 1.0], [0, 1, 1, 0.3]);
 
     // Progress for vertical bar
     const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
@@ -279,7 +277,7 @@ export function ScrollAnimation() {
                                 </marker>
                             </defs>
 
-                            {/* Line from Message to AI (Dotted & Flowing) */}
+                            {/* Line from Message to AI (Dotted - STATIQUE) */}
                             <motion.path
                                 d="M320 200 L420 200"
                                 stroke="url(#premiumArrowGradient)"
@@ -287,8 +285,6 @@ export function ScrollAnimation() {
                                 strokeDasharray="6 4"
                                 fill="none"
                                 style={{ pathLength: sendProgress, opacity: 0.5 }}
-                                animate={{ strokeDashoffset: [0, -20] }}
-                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                             />
 
                             {/* Premium Animated Curve from AI to Solution */}
@@ -304,34 +300,70 @@ export function ScrollAnimation() {
                                 style={{ pathLength: arrowProgress }}
                             />
 
-                            {/* Descent Line to next section (Dashed) */}
+                            {/* Descent Line to next section (Dashed - STATIQUE) */}
                             <motion.path
-                                d="M 740 200 Q 740 350 500 450"
+                                d="M 740 200 Q 630 350, 520 500 Q 510 600, 500 700"
                                 stroke="url(#premiumArrowGradient)"
-                                strokeWidth="2"
-                                strokeDasharray="4 4"
+                                strokeWidth="2.5"
+                                strokeDasharray="6 6"
                                 fill="none"
-                                style={{ pathLength: descentProgress, opacity: 0.3 }}
+                                markerEnd="url(#arrowheadPremium)"
+                                style={{ pathLength: descentProgress, opacity: 0.5 }}
                             />
                         </motion.svg>
 
-                        {/* Mouse Cursor traveling down */}
+                        {/* Mouse Cursor traveling down - SIMPLE ET RAPIDE */}
                         <motion.div
-                            className="absolute z-50 text-accent filter drop-shadow-md"
+                            className="absolute z-50"
                             style={{
                                 opacity: mouseOpacity,
-                                left: 0, // Base position, strictly controlled by transform
+                                left: 0,
                                 top: 0,
                                 x: mouseX,
                                 y: mouseY
                             }}
                         >
-                            <MousePointer2 size={24} fill="#3A8577" className="text-white" />
+                            <MousePointer2
+                                size={32}
+                                fill="#0EA5E9"
+                                className="text-white drop-shadow-lg"
+                            />
                         </motion.div>
 
                     </div>
 
-                    {/* Scroll indicator - replaced by the traveling mouse logic above */}
+                    {/* Scroll down indicator at bottom - Responsive */}
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 2, duration: 0.8 }}
+                        className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-10 px-4 w-full max-w-md"
+                    >
+                        <motion.div
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                            className="flex flex-col items-center gap-3"
+                        >
+                            <div className="text-xs md:text-sm font-medium text-gray-600 bg-white/95 backdrop-blur-md px-4 md:px-6 py-2 md:py-3 rounded-full shadow-xl border border-gray-200 text-center">
+                                <span className="hidden sm:inline">Continuez pour découvrir </span>
+                                <span className="font-bold text-accent">l'histoire de Marie</span>
+                            </div>
+                            <motion.div
+                                className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-accent bg-white flex items-center justify-center shadow-lg"
+                                animate={{
+                                    scale: [1, 1.15, 1],
+                                    boxShadow: [
+                                        "0 4px 12px rgba(14, 165, 233, 0.2)",
+                                        "0 6px 20px rgba(14, 165, 233, 0.4)",
+                                        "0 4px 12px rgba(14, 165, 233, 0.2)"
+                                    ]
+                                }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                            >
+                                <ChevronDown className="text-accent" size={20} strokeWidth={2.5} />
+                            </motion.div>
+                        </motion.div>
+                    </motion.div>
                 </div>
             </div>
         </section>
