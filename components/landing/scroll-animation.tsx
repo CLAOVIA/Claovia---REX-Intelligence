@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Zap, FileText, Send, CheckCircle, Sparkles, User, MousePointer2, ChevronDown } from "lucide-react";
+import { Zap, FileText, Send, CheckCircle, Sparkles, User, ChevronDown } from "lucide-react";
 
 const STEPS = [
     { id: 1, label: "Message envoyé", color: "bg-accent" },
@@ -18,38 +18,30 @@ export function ScrollAnimation() {
         offset: ["start end", "end start"],
     });
 
-    // Animation phases based on scroll - ACCÉLÉRÉES
-    const messageOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
-    const messageY = useTransform(scrollYProgress, [0, 0.1], [50, 0]);
+    // Animation phases - SÉQUENCE CLAIRE
+    const messageOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+    const messageY = useTransform(scrollYProgress, [0, 0.15], [40, 0]);
 
-    const sendProgress = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
-    const sendScale = useTransform(scrollYProgress, [0.1, 0.2], [1, 0.9]);
+    const sendProgress = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
 
-    const processingOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
-    const processingScale = useTransform(scrollYProgress, [0.2, 0.3], [0.8, 1]);
+    const processingOpacity = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
+    const processingScale = useTransform(scrollYProgress, [0.3, 0.45], [0.9, 1]);
 
-    // Arrow animation - RAPIDE
-    const arrowProgress = useTransform(scrollYProgress, [0.3, 0.4], [0, 1]);
+    const arrowProgress = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
 
-    const solutionOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
-    const solutionY = useTransform(scrollYProgress, [0.35, 0.5], [30, 0]);
+    const solutionOpacity = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
+    const solutionY = useTransform(scrollYProgress, [0.6, 0.75], [40, 0]);
 
-    const managerOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
-    const managerX = useTransform(scrollYProgress, [0.45, 0.6], [50, 0]);
-
-    // Descent animation: CURSEUR RAPIDE qui descend jusqu'en bas
-    const descentProgress = useTransform(scrollYProgress, [0.6, 1.0], [0, 1]);
-    const mouseY = useTransform(scrollYProgress, [0.6, 0.8, 1.0], [200, 500, 700]);
-    const mouseX = useTransform(scrollYProgress, [0.6, 0.75, 1.0], [740, 520, 500]);
-    const mouseOpacity = useTransform(scrollYProgress, [0.6, 0.65, 0.98, 1.0], [0, 1, 1, 0.3]);
+    // Curseur qui pointe vers le bas
+    const mouseOpacity = useTransform(scrollYProgress, [0.75, 0.8, 0.95, 1.0], [0, 1, 1, 0]);
 
     // Progress for vertical bar
     const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
     // Step indicators
-    const step1Active = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-    const step2Active = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
-    const step3Active = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
+    const step1Active = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+    const step2Active = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
+    const step3Active = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
 
     return (
         <section ref={containerRef} className="min-h-[140vh] relative bg-gradient-to-b from-cream to-white">
@@ -112,9 +104,7 @@ export function ScrollAnimation() {
                             style={{ opacity: messageOpacity, y: messageY }}
                             className="absolute left-0 md:left-[5%] top-1/2 -translate-y-1/2 w-[300px] md:w-[320px] z-10"
                         >
-                            <motion.div
-                                style={{ scale: sendScale }}
-                                className="glass-enhanced rounded-3xl p-6 shadow-2xl border border-white/40 relative overflow-hidden group"
+                            <div className="glass-enhanced rounded-3xl p-6 shadow-2xl border border-white/40 relative overflow-hidden group"
                             >
                                 {/* Decorative gradient blur */}
                                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-all duration-500" />
@@ -147,7 +137,7 @@ export function ScrollAnimation() {
                                         <Send size={10} />
                                     </div>
                                 </motion.div>
-                            </motion.div>
+                            </div>
                         </motion.div>
 
                         {/* ========================================================
@@ -199,9 +189,7 @@ export function ScrollAnimation() {
                             style={{ opacity: solutionOpacity, y: solutionY }}
                             className="absolute right-0 md:right-[5%] top-1/2 -translate-y-1/2 w-[320px] md:w-[350px] z-10"
                         >
-                            <motion.div
-                                style={{ opacity: managerOpacity, x: managerX }}
-                                className="bg-white rounded-3xl p-0 shadow-2xl border border-gray-100 relative overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500"
+                            <div className="bg-white rounded-3xl p-0 shadow-2xl border border-gray-100 relative overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500"
                             >
                                 {/* Header Strip */}
                                 <div className="bg-deep px-6 py-4 flex items-center justify-between">
@@ -255,7 +243,7 @@ export function ScrollAnimation() {
                                         </div>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         </motion.div>
 
                         <motion.svg
@@ -300,70 +288,29 @@ export function ScrollAnimation() {
                                 style={{ pathLength: arrowProgress }}
                             />
 
-                            {/* Descent Line to next section (Dashed - STATIQUE) */}
-                            <motion.path
-                                d="M 740 200 Q 630 350, 520 500 Q 510 600, 500 700"
-                                stroke="url(#premiumArrowGradient)"
-                                strokeWidth="2.5"
-                                strokeDasharray="6 6"
-                                fill="none"
-                                markerEnd="url(#arrowheadPremium)"
-                                style={{ pathLength: descentProgress, opacity: 0.5 }}
-                            />
                         </motion.svg>
 
-                        {/* Mouse Cursor traveling down - SIMPLE ET RAPIDE */}
+                        {/* Curseur pointant vers le bas - VERT CLAOVIA */}
                         <motion.div
-                            className="absolute z-50"
-                            style={{
-                                opacity: mouseOpacity,
-                                left: 0,
-                                top: 0,
-                                x: mouseX,
-                                y: mouseY
-                            }}
+                            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50"
+                            style={{ opacity: mouseOpacity }}
                         >
-                            <MousePointer2
-                                size={32}
-                                fill="#0EA5E9"
-                                className="text-white drop-shadow-lg"
-                            />
+                            <motion.div
+                                className="flex flex-col items-center gap-3"
+                                animate={{ y: [0, 8, 0] }}
+                                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                <div className="text-xs md:text-sm font-medium text-gray-600 bg-white/95 backdrop-blur-md px-4 md:px-6 py-2 md:py-3 rounded-full shadow-xl border border-gray-200 text-center">
+                                    <span className="hidden sm:inline">Continuez pour découvrir </span>
+                                    <span className="font-bold text-accent">l'histoire de Marie</span>
+                                </div>
+                                <div className="w-10 h-10 rounded-full border-2 border-accent bg-white flex items-center justify-center shadow-lg">
+                                    <ChevronDown className="text-accent" size={20} strokeWidth={2.5} />
+                                </div>
+                            </motion.div>
                         </motion.div>
 
                     </div>
-
-                    {/* Scroll down indicator at bottom - Responsive */}
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 2, duration: 0.8 }}
-                        className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-10 px-4 w-full max-w-md"
-                    >
-                        <motion.div
-                            animate={{ y: [0, 10, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                            className="flex flex-col items-center gap-3"
-                        >
-                            <div className="text-xs md:text-sm font-medium text-gray-600 bg-white/95 backdrop-blur-md px-4 md:px-6 py-2 md:py-3 rounded-full shadow-xl border border-gray-200 text-center">
-                                <span className="hidden sm:inline">Continuez pour découvrir </span>
-                                <span className="font-bold text-accent">l'histoire de Marie</span>
-                            </div>
-                            <motion.div
-                                className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-accent bg-white flex items-center justify-center shadow-lg"
-                                animate={{
-                                    scale: [1, 1.15, 1],
-                                    boxShadow: [
-                                        "0 4px 12px rgba(14, 165, 233, 0.2)",
-                                        "0 6px 20px rgba(14, 165, 233, 0.4)",
-                                        "0 4px 12px rgba(14, 165, 233, 0.2)"
-                                    ]
-                                }}
-                                transition={{ duration: 1.5, repeat: Infinity }}
-                            >
-                                <ChevronDown className="text-accent" size={20} strokeWidth={2.5} />
-                            </motion.div>
-                        </motion.div>
-                    </motion.div>
                 </div>
             </div>
         </section>
