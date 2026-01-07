@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Zap, FileText, Send, CheckCircle, Sparkles, User } from "lucide-react";
+import { Zap, FileText, Send, CheckCircle, Sparkles, User, MousePointer2 } from "lucide-react";
 
 const STEPS = [
     { id: 1, label: "Message envoyé", color: "bg-accent" },
@@ -18,7 +18,7 @@ export function ScrollAnimation() {
         offset: ["start end", "end start"],
     });
 
-    // Animation phases based on scroll - optimized for 130vh (faster/more direct)
+    // Animation phases based on scroll - optimized for 140vh to allow descent
     const messageOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
     const messageY = useTransform(scrollYProgress, [0, 0.2], [50, 0]);
 
@@ -37,6 +37,14 @@ export function ScrollAnimation() {
     const managerOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
     const managerX = useTransform(scrollYProgress, [0.75, 0.9], [50, 0]);
 
+    // Descent animation: Mouse travels down from Action Plan to bottom
+    const descentProgress = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
+    // Map descent progress to vertical position (from card height to bottom of screen)
+    // Assuming card is around center (200px), moving down to 400px (bottom)
+    const mouseY = useTransform(scrollYProgress, [0.8, 0.95], [200, 450]);
+    const mouseX = useTransform(scrollYProgress, [0.8, 0.95], [740, 500]); // Curve back to center
+    const mouseOpacity = useTransform(scrollYProgress, [0.8, 0.85, 0.95], [0, 1, 0]);
+
     // Progress for vertical bar
     const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
@@ -46,7 +54,7 @@ export function ScrollAnimation() {
     const step3Active = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
 
     return (
-        <section ref={containerRef} className="min-h-[130vh] relative bg-gradient-to-b from-cream to-white">
+        <section ref={containerRef} className="min-h-[140vh] relative bg-gradient-to-b from-cream to-white">
             {/* Vertical Progress Bar (Desktop) */}
             <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-3">
                 <div className="relative h-32 w-1 bg-gray-200 rounded-full overflow-hidden">
@@ -82,7 +90,7 @@ export function ScrollAnimation() {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="text-center mb-8 md:mb-12"
+                        className="text-center mb-0 md:mb-8"
                     >
                         <span className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 text-accent px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
                             <Zap size={12} />
@@ -295,27 +303,35 @@ export function ScrollAnimation() {
                                 strokeLinecap="round"
                                 style={{ pathLength: arrowProgress }}
                             />
+
+                            {/* Descent Line to next section (Dashed) */}
+                            <motion.path
+                                d="M 740 200 Q 740 350 500 450"
+                                stroke="url(#premiumArrowGradient)"
+                                strokeWidth="2"
+                                strokeDasharray="4 4"
+                                fill="none"
+                                style={{ pathLength: descentProgress, opacity: 0.3 }}
+                            />
                         </motion.svg>
+
+                        {/* Mouse Cursor traveling down */}
+                        <motion.div
+                            className="absolute z-50 text-accent filter drop-shadow-md"
+                            style={{
+                                opacity: mouseOpacity,
+                                left: 0, // Base position, strictly controlled by transform
+                                top: 0,
+                                x: mouseX,
+                                y: mouseY
+                            }}
+                        >
+                            <MousePointer2 size={24} fill="#3A8577" className="text-white" />
+                        </motion.div>
+
                     </div>
 
-                    {/* Scroll indicator with fade out */}
-                    <motion.div
-                        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-                        style={{ opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]) }}
-                    >
-                        <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Découvrir le process</span>
-                        <motion.div
-                            animate={{ y: [0, 6, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                            className="w-6 h-10 rounded-full border-2 border-gray-200 flex justify-center p-1"
-                        >
-                            <motion.div
-                                animate={{ height: ["20%", "50%", "20%"] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                className="w-1 bg-accent/50 rounded-full"
-                            />
-                        </motion.div>
-                    </motion.div>
+                    {/* Scroll indicator - replaced by the traveling mouse logic above */}
                 </div>
             </div>
         </section>
