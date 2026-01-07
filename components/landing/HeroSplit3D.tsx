@@ -70,13 +70,9 @@ export function HeroSplit3D() {
     }, []);
 
     return (
-        <section className="relative min-h-[90vh] bg-cream pt-24 pb-12 overflow-hidden flex flex-col justify-center">
+        <section className="relative min-h-[80vh] pt-10 pb-12 overflow-visible flex flex-col justify-center">
 
-            {/* Background Decorations */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-accent/5 rounded-full blur-[120px]" />
-                <div className="absolute top-[40%] role-[10%] w-[40%] h-[40%] bg-deep/5 rounded-full blur-[100px]" />
-            </div>
+            {/* Background Decorations REMOVED for HeroBackground */}
 
             <div className="max-w-7xl mx-auto px-6 w-full z-10 grid lg:grid-cols-2 gap-12 items-center">
 
