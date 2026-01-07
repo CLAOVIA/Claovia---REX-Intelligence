@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { MessageSquare, Zap, FileText, Send, CheckCircle, ArrowDown, Sparkles, User } from "lucide-react";
+import { Zap, FileText, Send, CheckCircle, Sparkles, User } from "lucide-react";
 
 const STEPS = [
     { id: 1, label: "Message envoyé", color: "bg-accent" },
@@ -18,32 +18,35 @@ export function ScrollAnimation() {
         offset: ["start end", "end start"],
     });
 
-    // Animation phases based on scroll - optimized for 150vh
-    const messageOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
-    const messageY = useTransform(scrollYProgress, [0, 0.25], [50, 0]);
+    // Animation phases based on scroll - optimized for 130vh (faster/more direct)
+    const messageOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+    const messageY = useTransform(scrollYProgress, [0, 0.2], [50, 0]);
 
-    const sendProgress = useTransform(scrollYProgress, [0.25, 0.4], [0, 1]);
-    const sendScale = useTransform(scrollYProgress, [0.25, 0.4], [1, 0.95]);
+    const sendProgress = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
+    const sendScale = useTransform(scrollYProgress, [0.2, 0.35], [1, 0.9]);
 
-    const processingOpacity = useTransform(scrollYProgress, [0.4, 0.55], [0, 1]);
-    const processingScale = useTransform(scrollYProgress, [0.4, 0.55], [0.8, 1]);
+    const processingOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
+    const processingScale = useTransform(scrollYProgress, [0.35, 0.5], [0.8, 1]);
 
-    const solutionOpacity = useTransform(scrollYProgress, [0.55, 0.75], [0, 1]);
-    const solutionY = useTransform(scrollYProgress, [0.55, 0.75], [30, 0]);
+    // Arrow animation starts as processing finishes
+    const arrowProgress = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
 
-    const managerOpacity = useTransform(scrollYProgress, [0.75, 0.95], [0, 1]);
-    const managerX = useTransform(scrollYProgress, [0.75, 0.95], [50, 0]);
+    const solutionOpacity = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
+    const solutionY = useTransform(scrollYProgress, [0.6, 0.8], [30, 0]);
+
+    const managerOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
+    const managerX = useTransform(scrollYProgress, [0.75, 0.9], [50, 0]);
 
     // Progress for vertical bar
     const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
     // Step indicators
-    const step1Active = useTransform(scrollYProgress, [0, 0.25], [0, 1]);
-    const step2Active = useTransform(scrollYProgress, [0.4, 0.55], [0, 1]);
-    const step3Active = useTransform(scrollYProgress, [0.75, 0.95], [0, 1]);
+    const step1Active = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+    const step2Active = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
+    const step3Active = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
 
     return (
-        <section ref={containerRef} className="min-h-[150vh] relative bg-gradient-to-b from-cream to-white">
+        <section ref={containerRef} className="min-h-[130vh] relative bg-gradient-to-b from-cream to-white">
             {/* Vertical Progress Bar (Desktop) */}
             <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-3">
                 <div className="relative h-32 w-1 bg-gray-200 rounded-full overflow-hidden">
@@ -67,10 +70,6 @@ export function ScrollAnimation() {
                             className="flex items-center gap-2"
                         >
                             <div className={`w-2 h-2 rounded-full ${step.color} shadow-sm`} />
-                            {/* Label hidden to reduce clutter, could be shown on hover */}
-                            {/* <span className="text-xs font-medium text-gray-500 whitespace-nowrap">
-                                {step.label}
-                            </span> */}
                         </motion.div>
                     ))}
                 </div>
@@ -83,7 +82,7 @@ export function ScrollAnimation() {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="text-center mb-12 md:mb-20"
+                        className="text-center mb-8 md:mb-12"
                     >
                         <span className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 text-accent px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
                             <Zap size={12} />
@@ -253,40 +252,41 @@ export function ScrollAnimation() {
                             </motion.div>
                         </motion.div>
 
-                        {/* Connection Lines (Desktop only) */}
-                        <motion.svg
-                            className="absolute inset-0 w-full h-full pointer-events-none hidden md:block -z-10"
-                            style={{ opacity: processingOpacity }}
-                        >
-                            <defs>
-                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#3A8577" stopOpacity="0" />
-                                    <stop offset="50%" stopColor="#3A8577" stopOpacity="0.5" />
-                                    <stop offset="100%" stopColor="#20372F" stopOpacity="0" />
-                                </linearGradient>
-                            </defs>
-                            <motion.path
-                                d="M320 200 C 400 200, 400 200, 480 200"
-                                stroke="url(#lineGradient)"
-                                strokeWidth="2"
-                                fill="none"
-                                strokeDasharray="4 4"
-                                style={{ pathLength: sendProgress }}
-                            />
-                            <motion.path
-                                d="M640 200 C 720 200, 720 200, 800 200"
-                                stroke="url(#lineGradient)"
-                                strokeWidth="2"
-                                fill="none"
-                                strokeDasharray="4 4"
-                                style={{ pathLength: solutionOpacity }}
-                            />
-                        </motion.svg>
+                        {/* Connection Arrow (Desktop only) */}
+                        <motion.div className="absolute inset-0 pointer-events-none hidden md:block -z-10">
+                            <svg className="w-full h-full" viewBox="0 0 1000 400">
+                                <defs>
+                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#3A8577" />
+                                    </marker>
+                                </defs>
+
+                                {/* Line from Message to AI (Dotted) */}
+                                <motion.path
+                                    d="M320 200 L420 200"
+                                    stroke="#3A8577"
+                                    strokeWidth="2"
+                                    strokeDasharray="4 4"
+                                    fill="none"
+                                    style={{ pathLength: sendProgress, opacity: 0.3 }}
+                                />
+
+                                {/* Animated Arrow from AI to Solution (Solid & Animated) */}
+                                <motion.path
+                                    d="M580 200 L680 200"
+                                    stroke="#3A8577"
+                                    strokeWidth="3"
+                                    fill="none"
+                                    markerEnd="url(#arrowhead)"
+                                    style={{ pathLength: arrowProgress }}
+                                />
+                            </svg>
+                        </motion.div>
                     </div>
 
                     {/* Scroll indicator with fade out */}
                     <motion.div
-                        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+                        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
                         style={{ opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]) }}
                     >
                         <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Découvrir le process</span>
