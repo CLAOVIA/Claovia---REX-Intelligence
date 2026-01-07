@@ -1,8 +1,15 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Helper for lazy client initialization
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("Missing OPENAI_API_KEY environment variable");
+  }
+  return new OpenAI({
+    apiKey: apiKey,
+  });
+}
 
 // System prompt for Clao (Collaborator chat)
 export const CLAO_SYSTEM_PROMPT = `Tu es Clao, un assistant bienveillant qui aide les collaborateurs à faire leur retour d'expérience (REX) professionnel.
@@ -121,6 +128,7 @@ export async function sendChatMessage(
   systemPrompt: string = CLAO_SYSTEM_PROMPT
 ) {
   try {
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -153,6 +161,7 @@ export async function analyzeRexConversation(
   collaboratorName: string
 ) {
   try {
+    const openai = getOpenAIClient();
     const conversationText = messages
       .map((m) => `${m.role}: ${m.content}`)
       .join("\n\n");
@@ -194,6 +203,7 @@ export async function generateManagerEmail(
   }
 ) {
   try {
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -235,6 +245,7 @@ export async function generateInterviewGuide(
   }
 ) {
   try {
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
