@@ -252,36 +252,50 @@ export function ScrollAnimation() {
                             </motion.div>
                         </motion.div>
 
-                        {/* Connection Arrow (Desktop only) */}
-                        <motion.div className="absolute inset-0 pointer-events-none hidden md:block -z-10">
-                            <svg className="w-full h-full" viewBox="0 0 1000 400">
-                                <defs>
-                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="#3A8577" />
-                                    </marker>
-                                </defs>
+                        <motion.svg
+                            className="absolute inset-0 w-full h-full pointer-events-none hidden md:block -z-10 overflow-visible"
+                            style={{ opacity: processingOpacity }}
+                        >
+                            <defs>
+                                <linearGradient id="premiumArrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#3A8577" stopOpacity="0.4" />
+                                    <stop offset="50%" stopColor="#3A8577" stopOpacity="1" />
+                                    <stop offset="100%" stopColor="#20372F" stopOpacity="1" />
+                                </linearGradient>
+                                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                                <marker id="arrowheadPremium" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                                    <path d="M2,2 L10,6 L2,10 L4,6 Z" fill="#20372F" />
+                                </marker>
+                            </defs>
 
-                                {/* Line from Message to AI (Dotted) */}
-                                <motion.path
-                                    d="M320 200 L420 200"
-                                    stroke="#3A8577"
-                                    strokeWidth="2"
-                                    strokeDasharray="4 4"
-                                    fill="none"
-                                    style={{ pathLength: sendProgress, opacity: 0.3 }}
-                                />
+                            {/* Line from Message to AI (Dotted & Flowing) */}
+                            <motion.path
+                                d="M320 200 L420 200"
+                                stroke="url(#premiumArrowGradient)"
+                                strokeWidth="2"
+                                strokeDasharray="6 4"
+                                fill="none"
+                                style={{ pathLength: sendProgress, opacity: 0.5 }}
+                                animate={{ strokeDashoffset: [0, -20] }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                            />
 
-                                {/* Animated Arrow from AI to Solution (Curved & Organic) */}
-                                <motion.path
-                                    d="M 580 200 Q 650 140 720 200"
-                                    stroke="#3A8577"
-                                    strokeWidth="3"
-                                    fill="none"
-                                    markerEnd="url(#arrowhead)"
-                                    style={{ pathLength: arrowProgress }}
-                                />
-                            </svg>
-                        </motion.div>
+                            {/* Premium Animated Curve from AI to Solution */}
+                            {/* Uses Cubic Bezier for smoother "S" curve feel */}
+                            <motion.path
+                                d="M 580 200 C 620 200, 640 100, 740 200"
+                                stroke="url(#premiumArrowGradient)"
+                                strokeWidth="3"
+                                fill="none"
+                                filter="url(#glow)"
+                                markerEnd="url(#arrowheadPremium)"
+                                strokeLinecap="round"
+                                style={{ pathLength: arrowProgress }}
+                            />
+                        </motion.svg>
                     </div>
 
                     {/* Scroll indicator with fade out */}
