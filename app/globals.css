@@ -737,4 +737,162 @@ select:focus-visible,
   transform: translateZ(0);
   will-change: transform;
 }
-html { scroll-behavior: smooth; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ========================================
+   SAGE SAGE REDESIGN ADDITIONS
+   ======================================== */
+
+.timeline-step {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.timeline-step.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-line-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2rem;
+  width: 4px;
+  background-color: var(--sage-100, #E3EBE6);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .timeline-line-container {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.timeline-progress {
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to bottom, var(--sage-500, #6B9078), var(--sage-800, #2D4438));
+  transition: height 0.1s linear;
+}
+
+.highlight-text {
+  background: linear-gradient(120deg, transparent 0%, transparent 50%, var(--sage-200, #C5D6CC) 50%, var(--sage-200, #C5D6CC) 100%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.5s ease;
+  padding: 0 4px;
+  margin: 0 -4px;
+}
+
+.highlight-text.visible {
+  background-position: 0 0;
+}
+
+.scale-in {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.line-draw {
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.line-draw.visible {
+  width: 100%;
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.stagger-item {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.active .stagger-1 {
+  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+}
+
+.active .stagger-2 {
+  animation: fadeInUp 0.6s ease-out 0.4s forwards;
+}
+
+.active .stagger-3 {
+  animation: fadeInUp 0.6s ease-out 0.6s forwards;
+}
+
+.active .stagger-4 {
+  animation: fadeInUp 0.6s ease-out 0.8s forwards;
+}
+
+.active .stagger-5 {
+  animation: fadeInUp 0.6s ease-out 1.0s forwards;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.rotate-y-12 {
+  transform: rotateY(-12deg) rotateX(5deg);
+}
+
+.rotate-y-inv-12 {
+  transform: rotateY(12deg) rotateX(5deg);
+}
+
+.typing-dot {
+  animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing {
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+
+  40% {
+    transform: scale(1);
+  }
+}
+
+.connection-line {
+  background: linear-gradient(90deg, #E3EBE6 50%, #6B9078 50%);
+  background-size: 200% 100%;
+  animation: flowLine 3s linear infinite;
+}
+
+@keyframes flowLine {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
