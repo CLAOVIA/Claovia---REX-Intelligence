@@ -9,6 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Sage color palette for new design
+        sage: {
+          50: '#F4F7F5',
+          100: '#E3EBE6',
+          200: '#C5D6CC',
+          300: '#A3C2B0',
+          400: '#87AB96',
+          500: '#6B9078',
+          600: '#4F705D',
+          700: '#3E5649',
+          800: '#2D4438',
+          900: '#1F3027',
+        },
         // Primary - Deep Forest Green
         primary: {
           DEFAULT: "#20372F",
