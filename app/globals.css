@@ -523,6 +523,29 @@ select:focus-visible,
   }
 }
 
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom connection line animation for Onboarding */
+.connection-line {
+  background: linear-gradient(90deg, #E3EBE6 50%, #6B9078 50%);
+  background-size: 200% 100%;
+  animation: flowLine 3s linear infinite;
+}
+
+@keyframes flowLine {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
 /* ========================================
    STICKY CTA BUTTON
    ======================================== */

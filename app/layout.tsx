@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -65,6 +66,7 @@ export default function RootLayout({
       <html lang="fr" suppressHydrationWarning>
         <body className={`${inter.variable} ${poppins.variable} font-sans`} suppressHydrationWarning>
           {children}
+          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>

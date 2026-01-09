@@ -5,24 +5,12 @@ import Link from "next/link";
 import {
   MessageCircle, Layers, FileCheck, CheckCircle,
   HeartHandshake, LayoutGrid, Zap, ArrowRight,
-  ShieldCheck, Lock
+  ShieldCheck, Lock, Network
 } from "lucide-react";
 
 export default function Onboarding() {
 
-  // Simple animation hook for consistency
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Add any specific visible classes if needed, 
-          // though most animations here are load-based via CSS classes
-        }
-      });
-    });
-    // Observer logic if needed for scroll animations
-    return () => observer.disconnect();
-  }, []);
+  // Lucide icons are handled by React components, so no need for lucide.createIcons() script.
 
   return (
     <div className="bg-sage-50 text-stone-600 antialiased font-sans selection:bg-sage-200 selection:text-sage-900 min-h-screen flex flex-col">
@@ -54,7 +42,7 @@ export default function Onboarding() {
         </div>
 
         {/* The Process Animation (Chat Flow) */}
-        <div className="w-full bg-white rounded-[2rem] p-8 md:p-12 shadow-xl shadow-sage-200/50 border border-sage-100 mb-16 relative overflow-hidden animate-slide-up" style={{ animationDelay: '0.2s' }}>
+        <div className="w-full bg-white rounded-[2rem] p-8 md:p-12 shadow-xl shadow-sage-200/50 border border-sage-100 mb-16 relative overflow-hidden animate-slide-up" style={{ animationDelay: "0.2s" }}>
           {/* Background Blob */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-sage-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
 
@@ -82,7 +70,7 @@ export default function Onboarding() {
               </div>
               <h3 className="font-bold text-sage-900 mb-1">Centralisation Intelligente</h3>
               <div className="flex gap-2 text-xs text-sage-600 font-medium bg-sage-50 px-3 py-1 rounded-full border border-sage-100 mb-2">
-                Analyse & Structuration
+                <Network className="w-3 h-3 mt-0.5" /> Analyse & Structuration
               </div>
               <p className="text-xs text-stone-500 max-w-[180px] leading-relaxed">
                 L'IA agrège vos retours pour en extraire l'essentiel sans perdre le sens.
@@ -110,7 +98,7 @@ export default function Onboarding() {
         </div>
 
         {/* Values Grid */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+        <div className="grid md:grid-cols-3 gap-6 mb-16 animate-slide-up" style={{ animationDelay: "0.4s" }}>
           <div className="p-6 bg-white rounded-2xl border border-stone-100 text-center hover:shadow-md transition-all">
             <div className="bg-sage-50 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-sage-600">
               <HeartHandshake className="w-6 h-6" />
@@ -135,7 +123,7 @@ export default function Onboarding() {
         </div>
 
         {/* The "Hook" Button */}
-        <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-2xl border border-stone-100 animate-slide-up text-center" style={{ animationDelay: '0.6s' }}>
+        <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-2xl border border-stone-100 animate-slide-up text-center" style={{ animationDelay: "0.6s" }}>
 
           <h3 className="text-xl font-bold text-sage-900 mb-6">Lancer votre REX</h3>
 
@@ -155,6 +143,7 @@ export default function Onboarding() {
       <footer className="text-center py-8 text-[10px] text-stone-400 border-t border-stone-100 bg-white">
         © 2026 Claovia. Tous droits réservés.
       </footer>
+
     </div>
   );
 }

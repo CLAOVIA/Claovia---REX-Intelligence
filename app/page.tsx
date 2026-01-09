@@ -7,25 +7,14 @@ import {
   Command, Menu, X, PlayCircle, ShieldCheck, Server, Lock,
   Eye, Sparkles, Bot, User, Send, LayoutDashboard, BrainCircuit,
   Lightbulb, Briefcase, Mail, ChevronDown, Mic2, Mic, Zap,
-  ArrowRight, CheckCircle, MessageCircle, Layers, FileCheck
+  ArrowRight, CheckCircle, MessageCircle, Layers, FileCheck, TrendingUp,
+  Award, AlertTriangle, Users
 } from "lucide-react";
-
-const CHAT_MESSAGES = [
-  { type: 'bot' as const, text: "Bonjour Marie ! Comment te sens-tu dans ton poste actuellement ?" },
-  { type: 'user' as const, text: "Honnêtement, c'est difficile. Je suis noyée sous l'administratif." },
-  { type: 'bot' as const, text: "Je comprends. As-tu le soutien nécessaire de Baptiste ?" },
-  { type: 'user' as const, text: "Pas vraiment. Il est très focus résultats, il ne voit pas mes blocages." },
-  { type: 'bot' as const, text: "Quelle demande concrète formulerais-tu ?" },
-  { type: 'user' as const, text: "30 min/semaine de coaching, pas de reporting." },
-];
+import { RexMockup } from "@/components/landing/RexMockup";
 
 export default function Home() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState<Array<{type: 'bot' | 'user', text: string}>>([]);
-  const [showTyping, setShowTyping] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll reveal observer
   useEffect(() => {
@@ -46,40 +35,27 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // Animated chat in hero
+  // Timeline scroll progress
   useEffect(() => {
-    if (currentIndex >= CHAT_MESSAGES.length) {
-      // Reset and replay after pause
-      setTimeout(() => {
-        setChatMessages([]);
-        setCurrentIndex(0);
-      }, 4000);
-      return;
-    }
+    const handleScroll = () => {
+      const timelineSection = document.getElementById('peter-principle');
+      if (!timelineSection) return;
 
-    const msg = CHAT_MESSAGES[currentIndex];
+      const rect = timelineSection.getBoundingClientRect();
+      const sectionTop = rect.top + window.scrollY;
+      const sectionHeight = rect.height;
+      const scrollProgress = (window.scrollY - sectionTop + window.innerHeight / 2) / sectionHeight;
 
-    if (msg.type === 'bot') {
-      setShowTyping(true);
-      setTimeout(() => {
-        setShowTyping(false);
-        setChatMessages(prev => [...prev, msg]);
-        setTimeout(() => setCurrentIndex(currentIndex + 1), 1500);
-      }, 1200);
-    } else {
-      setTimeout(() => {
-        setChatMessages(prev => [...prev, msg]);
-        setTimeout(() => setCurrentIndex(currentIndex + 1), 1000);
-      }, 800);
-    }
-  }, [currentIndex]);
+      const progressBar = document.getElementById('timeline-progress-bar');
+      if (progressBar) {
+        progressBar.style.height = `${Math.max(0, Math.min(100, scrollProgress * 100))}%`;
+      }
+    };
 
-  // Auto scroll chat
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  }, [chatMessages, showTyping]);
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -201,86 +177,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ========== HERO VISUAL : ANIMATION REX EN DIRECT ========== */}
-          <div className="relative hidden lg:block perspective-1000">
-            <div className="relative transform hover:scale-[1.02] transition-transform duration-500">
-
-              {/* Fenêtre de chat animée */}
-              <div className="bg-white rounded-[2rem] border border-sage-200 shadow-2xl overflow-hidden relative z-10">
-
-                {/* Header du chat */}
-                <div className="bg-sage-900 px-6 py-4 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white text-sm">Clao • Coach IA</h3>
-                    <p className="text-xs text-sage-200 flex items-center gap-1">
-                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                      REX en cours avec Marie...
-                    </p>
-                  </div>
-                  <div className="ml-auto flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                  </div>
-                </div>
-
-                {/* Zone de chat avec messages animés */}
-                <div ref={chatContainerRef} className="bg-stone-50 p-6 h-[380px] overflow-hidden relative">
-                  <div className="space-y-4">
-                    {chatMessages.map((msg, idx) => (
-                      <div key={idx} className={`flex gap-3 items-start chat-message visible ${msg.type === 'user' ? 'flex-row-reverse' : ''}`}>
-                        <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs ${msg.type === 'bot' ? 'bg-sage-800 text-white' : 'bg-blue-100 text-blue-600'}`}>
-                          {msg.type === 'bot' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                        </div>
-                        <div className={`px-4 py-3 rounded-2xl shadow-sm text-sm max-w-[85%] ${msg.type === 'bot' ? 'bg-white rounded-tl-none text-stone-600 border border-sage-100' : 'bg-blue-600 rounded-tr-none text-white'}`}>
-                          {msg.text}
-                        </div>
-                      </div>
-                    ))}
-
-                    {/* Indicateur de frappe */}
-                    {showTyping && (
-                      <div className="mt-4">
-                        <div className="flex gap-3 items-start">
-                          <div className="w-8 h-8 rounded-full bg-sage-800 flex-shrink-0 flex items-center justify-center text-white text-xs">
-                            <Bot className="w-4 h-4" />
-                          </div>
-                          <div className="bg-white px-4 py-3 rounded-2xl rounded-tl-none shadow-sm border border-sage-100">
-                            <div className="typing-indicator flex gap-1">
-                              <span className="w-2 h-2 bg-sage-600 rounded-full animate-bounce" style={{animationDelay: '-0.32s'}}></span>
-                              <span className="w-2 h-2 bg-sage-600 rounded-full animate-bounce" style={{animationDelay: '-0.16s'}}></span>
-                              <span className="w-2 h-2 bg-sage-600 rounded-full animate-bounce"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Input (décoratif) */}
-                <div className="bg-white border-t border-sage-100 px-6 py-4 flex gap-3">
-                  <div className="flex-1 bg-sage-50 rounded-full px-4 py-2 text-sm text-stone-400 border border-sage-100">
-                    Écrire un message...
-                  </div>
-                  <button className="w-10 h-10 rounded-full bg-sage-800 text-white flex items-center justify-center hover:bg-sage-900 transition-colors">
-                    <Send className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Badge flottant */}
-              <div className="absolute -bottom-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg animate-bounce">
-                <Sparkles className="w-3 h-3 inline mr-1" />
-                Exemple live
-              </div>
-
-              {/* Élément décoratif derrière */}
-              <div className="absolute -z-10 top-6 -right-6 w-full h-full bg-sage-200 rounded-[2rem] opacity-50 blur-sm"></div>
-            </div>
+          {/* ========== HERO VISUAL : 3D MOCKUP REX ========== */}
+          <div className="relative hidden lg:block">
+            <RexMockup />
           </div>
         </div>
       </header>
@@ -518,6 +417,171 @@ export default function Home() {
               <div className="text-4xl font-bold text-sage-800 mb-2">6 mois</div>
               <div className="text-sm font-semibold text-stone-400 uppercase mb-4">de productivité</div>
               <p className="text-stone-600 text-sm">Perdus avant qu'un nouveau talent soit opérationnel.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== PETER PRINCIPLE TIMELINE ========== */}
+      <section id="peter-principle" className="relative py-32 px-6 bg-gradient-to-b from-sage-50 to-white overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-sage-200 rounded-full blur-3xl animate-blob"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-100 rounded-full blur-3xl animate-blob" style={{animationDelay: '2s'}}></div>
+        </div>
+
+        <div className="max-w-5xl mx-auto relative z-10">
+          <div className="text-center mb-20 reveal">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold mb-4">
+              <AlertTriangle className="w-3 h-3" /> Le Principe de Peter
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-sage-900 mb-6">
+              Pourquoi les bons experts<br />deviennent des managers en difficulté ?
+            </h2>
+            <p className="text-lg text-stone-500 max-w-2xl mx-auto">
+              Le Principe de Peter explique qu'on est promu jusqu'à atteindre son niveau d'incompétence.
+              Excellent commercial ne signifie pas excellent manager.
+            </p>
+          </div>
+
+          <div className="relative">
+            {/* Timeline vertical line with progress */}
+            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-sage-200 rounded-full overflow-hidden">
+              <div id="timeline-progress-bar" className="timeline-progress w-full h-0 bg-gradient-to-b from-sage-500 to-sage-800 transition-all duration-100"></div>
+            </div>
+
+            {/* Timeline steps */}
+            <div className="space-y-16">
+              {/* Step 1 */}
+              <div className="timeline-step relative flex flex-col md:flex-row items-start md:items-center gap-8">
+                <div className="md:w-1/2 md:text-right md:pr-12">
+                  <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold mb-3">
+                    <TrendingUp className="w-3 h-3" /> Étape 1
+                  </div>
+                  <h3 className="text-2xl font-bold text-sage-900 mb-2">L'expert technique</h3>
+                  <p className="text-stone-600">
+                    Marie excelle dans son domaine. Ses compétences sont reconnues, ses résultats parlent d'eux-mêmes.
+                  </p>
+                </div>
+                <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-16 h-16 bg-white border-4 border-sage-200 rounded-full flex items-center justify-center shadow-lg z-10">
+                  <Award className="w-7 h-7 text-green-600" />
+                </div>
+                <div className="md:w-1/2 md:pl-12"></div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="timeline-step relative flex flex-col md:flex-row items-start md:items-center gap-8">
+                <div className="md:w-1/2 md:text-right md:pr-12"></div>
+                <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-16 h-16 bg-white border-4 border-sage-200 rounded-full flex items-center justify-center shadow-lg z-10">
+                  <TrendingUp className="w-7 h-7 text-blue-600" />
+                </div>
+                <div className="md:w-1/2 md:pl-12">
+                  <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold mb-3">
+                    <Users className="w-3 h-3" /> Étape 2
+                  </div>
+                  <h3 className="text-2xl font-bold text-sage-900 mb-2">La promotion</h3>
+                  <p className="text-stone-600">
+                    Récompense logique : elle devient manager. Mais gérer une équipe nécessite des compétences totalement différentes.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="timeline-step relative flex flex-col md:flex-row items-start md:items-center gap-8">
+                <div className="md:w-1/2 md:text-right md:pr-12">
+                  <div className="inline-flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs font-bold mb-3">
+                    <AlertTriangle className="w-3 h-3" /> Étape 3
+                  </div>
+                  <h3 className="text-2xl font-bold text-sage-900 mb-2">Le décalage</h3>
+                  <p className="text-stone-600">
+                    Marie n'a jamais été formée au management. Elle reproduit ce qu'elle a vécu, sans outils ni recul.
+                  </p>
+                </div>
+                <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-16 h-16 bg-white border-4 border-sage-200 rounded-full flex items-center justify-center shadow-lg z-10">
+                  <AlertTriangle className="w-7 h-7 text-orange-600" />
+                </div>
+                <div className="md:w-1/2 md:pl-12"></div>
+              </div>
+
+              {/* Step 4 */}
+              <div className="timeline-step relative flex flex-col md:flex-row items-start md:items-center gap-8">
+                <div className="md:w-1/2 md:text-right md:pr-12"></div>
+                <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-16 h-16 bg-white border-4 border-sage-500 rounded-full flex items-center justify-center shadow-xl z-10 animate-pulse-soft">
+                  <Sparkles className="w-7 h-7 text-sage-600" />
+                </div>
+                <div className="md:w-1/2 md:pl-12">
+                  <div className="inline-flex items-center gap-2 bg-sage-100 text-sage-800 px-3 py-1 rounded-full text-xs font-bold mb-3">
+                    <CheckCircle className="w-3 h-3" /> Solution Claovia
+                  </div>
+                  <h3 className="text-2xl font-bold text-sage-900 mb-2">L'accompagnement augmenté</h3>
+                  <p className="text-stone-600 mb-4">
+                    Claovia donne aux managers les outils qu'ils n'ont jamais eus : écoute structurée, analyse objective, plans d'action concrets.
+                  </p>
+                  <Link href="#onboarding" className="inline-flex items-center gap-2 text-sage-800 font-semibold hover:text-sage-900 transition-colors">
+                    Découvrir la solution <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== NOTRE VISION ========== */}
+      <section id="values" className="py-24 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-20 reveal">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sage-50 border border-sage-200 text-sage-800 text-xs font-semibold mb-4">
+              <Sparkles className="w-3 h-3" /> Notre Vision
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-sage-900 mb-6">
+              Pourquoi Claovia existe
+            </h2>
+            <p className="text-lg text-stone-500 max-w-2xl mx-auto">
+              Parce que nous avons vécu ce silence. Ces départs évitables. Ces talents perdus faute d'écoute.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 mb-16">
+            <div className="story-section bg-sage-50 rounded-3xl p-8 border border-sage-100">
+              <div className="w-14 h-14 bg-sage-800 rounded-2xl flex items-center justify-center mb-6">
+                <Lightbulb className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-sage-900 mb-4">L'origine</h3>
+              <p className="text-stone-600 leading-relaxed mb-4">
+                Claovia est né d'une conviction : <strong>les outils RH traditionnels ne capturent pas l'essentiel</strong>.
+                Les entretiens annuels arrivent trop tard. Les questionnaires anonymes restent sans suite.
+              </p>
+              <p className="text-stone-600 leading-relaxed">
+                Nous avons conçu un système où la parole collaborateur devient <strong>immédiatement actionnable</strong> pour le manager.
+              </p>
+            </div>
+
+            <div className="story-section bg-white rounded-3xl p-8 border border-sage-100 shadow-md">
+              <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <Users className="w-7 h-7 text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-sage-900 mb-4">L'impact</h3>
+              <p className="text-stone-600 leading-relaxed mb-4">
+                Claovia ne remplace pas l'humain. <strong>Il l'augmente</strong>. En donnant au manager les bonnes informations,
+                au bon moment, avec les bons outils d'action.
+              </p>
+              <p className="text-stone-600 leading-relaxed">
+                Notre mission : transformer chaque ressenti en opportunité de renforcer la relation managériale.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center story-section">
+            <div className="inline-flex flex-col md:flex-row items-center gap-6 bg-sage-900 text-white px-8 py-6 rounded-2xl">
+              <div className="flex -space-x-3">
+                <div className="w-12 h-12 rounded-full bg-sage-600 border-4 border-sage-900 flex items-center justify-center font-bold">MD</div>
+                <div className="w-12 h-12 rounded-full bg-sage-500 border-4 border-sage-900 flex items-center justify-center font-bold">BL</div>
+                <div className="w-12 h-12 rounded-full bg-sage-400 border-4 border-sage-900 flex items-center justify-center font-bold">TC</div>
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-lg mb-1">Rejoignez les managers qui transforment leur équipe</p>
+                <p className="text-sage-200 text-sm">+150 collaborateurs accompagnés depuis 2025</p>
+              </div>
             </div>
           </div>
         </div>
