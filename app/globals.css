@@ -958,3 +958,53 @@ html {
 .rotate-0 {
   transform: rotateX(0deg) rotateY(0deg);
 }
+
+/* ========================================
+   ADDITIONAL ANIMATIONS FROM HTML DESIGN
+   ======================================== */
+
+/* Animations reveal au scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Story sections */
+.story-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animated chat messages */
+.chat-message {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.chat-message.visible {
+  animation: messageAppear 0.4s ease-out forwards;
+}
+
+@keyframes messageAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
