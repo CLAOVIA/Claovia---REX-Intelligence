@@ -175,34 +175,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Hero Visual */}
-          <div className="relative hidden lg:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-sage-100 to-transparent rounded-full blur-3xl opacity-40"></div>
-            <div className="relative bg-white/50 backdrop-blur-md border border-white/50 p-8 rounded-3xl shadow-2xl">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-                  <Activity className="w-6 h-6 text-sage-600" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sage-900">Analyse en temps réel</h3>
-                  <p className="text-xs text-stone-500">Détection des signaux faibles</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-stone-100 flex items-center justify-between">
-                  <span className="text-sm font-medium text-stone-600">Climat Social</span>
-                  <span className="text-sm font-bold text-green-600">Stable</span>
-                </div>
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-stone-100 flex items-center justify-between">
-                  <span className="text-sm font-medium text-stone-600">Charge Équipe</span>
-                  <span className="text-sm font-bold text-orange-500">Élevée</span>
-                </div>
-                <div className="bg-sage-900 text-white p-4 rounded-xl shadow-lg flex items-center justify-between mt-4">
-                  <span className="text-sm font-medium">Actions recommandées</span>
-                  <span className="bg-white/20 px-2 py-1 rounded text-xs">3 nouvelles</span>
-                </div>
-              </div>
-            </div>
+          {/* Hero Visual - 3D REX Mockup */}
+          <div className="relative hidden lg:flex justify-center items-center">
+            <div className="absolute inset-0 bg-gradient-to-tr from-sage-100 to-transparent rounded-full blur-3xl opacity-40 animate-pulse-slow"></div>
+            <RexMockup />
           </div>
         </div>
       </header>
